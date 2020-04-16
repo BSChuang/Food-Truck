@@ -12,16 +12,21 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True # Placeholder
+    with con as cursor:
+        query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
+        cursor.execute(query, (username, password))
+        if cursor.fetchall != ():
+            return True
+    return False
 
+# Register_02 line ??
+# Return True if able to add user, False otherwise
+def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
-# Register_02 line ??
-# Return True if able to add user, False otherwise
-def insertUser(username, password, email, firstname, lastname, balance, userType):
     return True
 
 # Home_03 line 22
@@ -76,7 +81,6 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
-    return ["d", "e", "f"]
 
     result = []
     with con as cursor :
