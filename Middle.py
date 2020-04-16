@@ -32,20 +32,20 @@ def getUserType(username):
     admin = []
     employee = []
     staff = []
-    
+
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
         admin = cursor.fetchall()[0][0]
-        
+
         query = "SELECT COUNT(username) FROM employee WHERE username = %s"
         cursor.execute(query, (username))
         emloyee = cursor.fetchall()[0][0]
-        
+
         query = "SELECT COUNT(username) FROM staff WHERE username = %s"
         cursor.execute(query, (username))
         staff = cursor.fetchall()[0][0]
-        
+
     if admin == 1:
         return "admin"
     elif employee == 1:
@@ -61,17 +61,16 @@ def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin,
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
-    return ["A", "B", "C"]
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
         cursor.execute(query)
         nested_list = cursor.fetchall()
-        
+
     buildings = []
     for li in nested_list:
         buildings.append(li[0])
-        
+
     return buildings
 
 # Explore_16 line 17
@@ -86,7 +85,7 @@ def getStationNames():
         result = []
         for i in cursor.fetchall():
             result.append(tuple(i)[0])
-            
+
     return result
 
 # Explore_16 line 66
