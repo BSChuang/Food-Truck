@@ -17,6 +17,7 @@ def authenticateUser(username, password):
         cursor.execute(query, (username, password))
         if cursor.fetchall != ():
             return True
+
     return False
 
 # Register_02 line ??
