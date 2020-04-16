@@ -36,14 +36,14 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         createBuildingButton = buildButton("Create Building", self.createBuilding)
         updateBuildingButton = buildButton("Update Building", self.updateBuilding)
         deleteBuildingButton = buildButton("Delete Building", self.deleteBuilding)
-        hLayout3 = buildLayout('H', [backButton, createBuildingButton, updateBuildingButton, deleteBuildingButton])
+        hLayout3 = buildLayout('H', [createBuildingButton, updateBuildingButton, deleteBuildingButton])
         
         createStationButton = buildButton("Create Station", self.createStation)
         updateStationButton = buildButton("Update Station", self.updateStation)
         deleteStationButton = buildButton("Delete Station", self.deleteStation)
         hLayout4 = buildLayout('H', [createStationButton, updateStationButton, deleteStationButton])
 
-        layout = buildLayout('V', [buildLabel("Manage Building and Station"), hLayout1, hLayout2, filterButton, grid, hLayout3, hLayout4])
+        layout = buildLayout('V', [buildLabel("Manage Building and Station"), hLayout1, hLayout2, filterButton, grid, hLayout3, hLayout4, backButton])
 
         self.setLayout(layout)
 

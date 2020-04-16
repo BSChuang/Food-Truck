@@ -21,11 +21,11 @@ class HomeWindow(QtWidgets.QWidget):
         button7 = buildButton("Manage Food", self.manageFood)
 
         userType = getUserType(username)
-        if userType == "Customer":
+        if userType == "customer":
             layoutList = [button1, button2, button3]
-        elif userType == "Manager":
+        elif userType == "manager":
             layoutList = [button1, button2, button3, button4, button5]
-        elif userType == "Admin":
+        elif userType == "admin":
             layoutList = [button1, button2, button3, button6, button7]
 
         layout = buildLayout('V', [buildLabel("Home")] + layoutList)
