@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 
 def listToString(arr):
     string = ""
@@ -13,8 +13,11 @@ def buildLabel(text):
     userLabel.setText(text)
     return userLabel
 
-def buildTextbox():
-    return QtWidgets.QLineEdit()
+def buildTextbox(onlyInt=False):
+    textbox = QtWidgets.QLineEdit()
+    if onlyInt:
+        textbox.setValidator(QtGui.QIntValidator())
+    return textbox
 
 def buildButton(text, func):
     button = QtWidgets.QPushButton(text)

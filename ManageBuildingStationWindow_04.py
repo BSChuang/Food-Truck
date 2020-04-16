@@ -5,6 +5,10 @@ from Middle import *
 class ManageBuildingStationWindow(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toManageBuildingStation = QtCore.pyqtSignal()
+    toCreateBuilding = QtCore.pyqtSignal()
+    toUpdateBuilding = QtCore.pyqtSignal()
+    toCreateStation = QtCore.pyqtSignal()
+    toUpdateStation = QtCore.pyqtSignal()
 
     def __init__(self, user):
         self.user = user
@@ -22,8 +26,8 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         self.stationNameCombobox = buildComboBox(getStationNames())
         stationNameLayout = buildLayout('H', [buildLabel("Station Name"), self.stationNameCombobox])
 
-        self.capacityMin = buildTextbox()
-        self.capacityMax = buildTextbox()
+        self.capacityMin = buildTextbox(True)
+        self.capacityMax = buildTextbox(True)
         capacityLayout = buildLayout('H', [buildLabel("Capacity"), self.capacityMin, buildLabel("-"), self.capacityMax])
 
         hLayout2 = buildLayout('H', [stationNameLayout, capacityLayout])
@@ -60,15 +64,15 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         return newList
 
     def createBuilding(self):
-        pass
+        self.toCreateBuilding.emit()
     def updateBuilding(self):
-        pass
+        self.toUpdateBuilding.emit()
     def deleteBuilding(self):
         pass
     def createStation(self):
-        pass
+        self.toCreateStation.emit()
     def updateStation(self):
-        pass
+        self.toUpdateStation.emit()
     def deleteStation(self):
         pass
 

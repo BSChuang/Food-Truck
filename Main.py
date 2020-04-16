@@ -8,6 +8,10 @@ from ManageBuildingStationWindow_04 import ManageBuildingStationWindow
 from Explore_16 import ExploreWindow
 from CurrentInformation_17 import CurrentInformation
 from OrderHistory_19 import OrderHistory
+from CreateBuilding_05 import CreateBuildingWindow
+from UpdateBuilding_06 import UpdateBuildingWindow
+from CreateStation_07 import CreateStationWindow
+from UpdateStationWindow_08 import UpdateStationWindow
 
 class Controller:
     def __init__(self):
@@ -66,18 +70,84 @@ class Controller:
         self.homeWindow.show()
 
     def showManageBuildingStation(self):
+        def toHome():
+            self.manageBuildingStation.close()
+            self.showHome()
+
         def toManageBuildingStation():
             self.manageBuildingStation.close()
             self.showManageBuildingStation()
 
-        def toHome():
+        def toCreateBuilding():
             self.manageBuildingStation.close()
-            self.showHome()
+            self.showCreateBuilding()
+
+        def toUpdateBuilding():
+            self.manageBuildingStation.close()
+            self.showUpdateBuilding()
+
+        def toCreateStation():
+            self.manageBuildingStation.close()
+            self.showCreateStation()
+
+        def toUpdateStation():
+            self.manageBuildingStation.close()
+            self.showUpdateStation()
         
         self.manageBuildingStation = ManageBuildingStationWindow(self.user)
         self.manageBuildingStation.toHome.connect(toHome)
         self.manageBuildingStation.toManageBuildingStation.connect(toManageBuildingStation)
+        self.manageBuildingStation.toCreateBuilding.connect(toCreateBuilding)
+        self.manageBuildingStation.toUpdateBuilding.connect(toUpdateBuilding)
+        self.manageBuildingStation.toCreateStation.connect(toCreateStation)
+        self.manageBuildingStation.toUpdateStation.connect(toUpdateStation)
         self.manageBuildingStation.show()
+
+    def showCreateBuilding(self):
+        def toManageBuildingStation():
+            self.createBuildingWindow.close()
+            self.showManageBuildingStation()
+
+        def toCreateBuilding():
+            self.createBuildingWindow.close()
+            self.showCreateBuilding()
+
+        self.createBuildingWindow = CreateBuildingWindow(self.user)
+        self.createBuildingWindow.toManageBuildingStation.connect(toManageBuildingStation)
+        self.createBuildingWindow.toCreateBuilding.connect(toCreateBuilding)
+        self.createBuildingWindow.show()
+
+    def showUpdateBuilding(self):
+        def toManageBuildingStation():
+            self.updateBuildingWindow.close()
+            self.showManageBuildingStation()
+
+        def toUpdateBuilding():
+            self.updateBuildingWindow.close()
+            self.showUpdateBuilding()
+
+        self.updateBuildingWindow = UpdateBuildingWindow(self.user)
+        self.updateBuildingWindow.toManageBuildingStation.connect(toManageBuildingStation)
+        self.updateBuildingWindow.toUpdateBuilding.connect(toUpdateBuilding)
+        self.updateBuildingWindow.show()
+
+    def showCreateStation(self):
+        def toManageBuildingStation():
+            self.createStationWindow.close()
+            self.showManageBuildingStation()
+
+        self.createStationWindow = CreateStationWindow()
+        self.createStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
+        self.createStationWindow.show()
+
+    def showUpdateStation(self):
+        def toManageBuildingStation():
+            self.updateStationWindow.close()
+            self.showManageBuildingStation()
+
+        self.updateStationWindow = UpdateStationWindow()
+        self.updateStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
+        self.updateStationWindow.show()
 
     def showExplore(self):
         def toHome():
@@ -118,6 +188,7 @@ class User:
     def __init__(self):
         self.username = None
         self.filtered = []
+        self.tags = []
 
 
 def main():
@@ -133,6 +204,10 @@ if __name__ == '__main__':
 
 
 """ Window class skeleton
+from PyQt5 import QtCore, QtWidgets
+from Helpers import *
+from Middle import *
+
 class Window(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)

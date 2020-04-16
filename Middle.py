@@ -7,11 +7,13 @@ dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
-con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
+#con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
 
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
+    return True # Placeholder
+
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
@@ -63,9 +65,28 @@ def getUserType(username):
 def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin, capacityMax):
     return [("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
+# CreateBuilding_05 line 
+# Inserts building into database. Tags is an array of tags
+def insertBuilding(building, description, tags):
+    pass
+
+# UpdateBuilding_06
+def updateBuilding(building, description, tags):
+    pass
+
+# CreateStation_07
+def insertStation(station, capacity, sponsoredBuilding):
+    pass
+
+# UpdateStation_08
+def updateStation(station, capacity, sponsoredBuilding):
+    pass
+
+
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
+    return ['a', 'b', 'c'] # Placeholder
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
@@ -81,6 +102,7 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
+    return ['a', 'b', 'c'] # Placeholder
 
     result = []
     with con as cursor :
