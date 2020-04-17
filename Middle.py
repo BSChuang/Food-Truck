@@ -64,7 +64,6 @@ def getUserType(username):
 def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin, capacityMax):
     return [("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
-<<<<<<< HEAD
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
@@ -116,8 +115,6 @@ def insertFood(foodName):
 def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
     return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
-=======
->>>>>>> 56ae3cdb6c82fa299934648f53d3cfd1629eecdb
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
