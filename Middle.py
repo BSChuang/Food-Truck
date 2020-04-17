@@ -7,18 +7,17 @@ dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
-#con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
+con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
 
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True # Placeholder
-
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
         if cursor.fetchall != ():
             return True
+
     return False
 
 # Register_02 line ??
@@ -65,6 +64,7 @@ def getUserType(username):
 def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin, capacityMax):
     return [("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
+<<<<<<< HEAD
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
@@ -116,10 +116,11 @@ def insertFood(foodName):
 def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
     return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
+=======
+>>>>>>> 56ae3cdb6c82fa299934648f53d3cfd1629eecdb
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
-    return ['a', 'b', 'c'] # Placeholder
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
@@ -135,11 +136,10 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
-    return ['a', 'b', 'c'] # Placeholder
 
     result = []
     with con as cursor :
-        query = 'select distinct(buildingname) from building'
+        query = 'select distinct(stationName) from station'
         cursor.execute(query)
         result = []
         for i in cursor.fetchall():
@@ -155,7 +155,21 @@ def setUserStation(username, station):
 # Explore_16 line 55
 # Returns list of tuples (rows) which fulfill criteria
 def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
-    return [("Station One", "Building One", ["FT 1", "FT2", "FT34"], ["Apple", "Banana", "Orange"])]
+    givenArgs = (buildingName, stationName, buildingTag, truckName, food)
+    for arg in givenArgs:
+        if arg == '':
+            arg = None
+
+    print(givenArgs)
+
+    with con as cursor:
+        query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s);')
+        cursor.execute(query, (givenArgs[0],givenArgs[1],givenArgs[2],givenArgs[3],givenArgs[4]))
+        con.commit()
+        query = 'SELECT * FROM cus_filter_explore_result;'
+        cursor.execute(query)
+        print(list(cursor.fetchall()))
+        return list(cursor.fetchall())
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
