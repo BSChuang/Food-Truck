@@ -85,7 +85,7 @@ def getStationNames():
 
     result = []
     with con as cursor :
-        query = 'select distinct(buildingname) from building'
+        query = 'select distinct(stationName) from station'
         cursor.execute(query)
         result = []
         for i in cursor.fetchall():
@@ -102,13 +102,10 @@ def setUserStation(username, station):
 # Returns list of tuples (rows) which fulfill criteria
 def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
     with con as cursor:
-        query = ('SELECT stationName, buildingName, foodTruckName, foodname\
-        FROM foodtruck NATURAL JOIN station NATURAL JOIN building NATURAL JOIN menuitem\
-        WHERE buildingName = %s AND stationName = %s AND foodname LIKE \'\%%s\%\'and truckName LIKE \'\%%s\%\';')
-        cursor.execute(query, (buildingName,stationName,food,truckName))
+        query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s)')
+        cursor.execute(query, (buildingName,stationName,buildingTag,truckName,food))
         print(cursor.fetchall())
-
-    return True
+        return cursor.fetchall()
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
