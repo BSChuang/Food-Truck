@@ -101,11 +101,21 @@ def setUserStation(username, station):
 # Explore_16 line 55
 # Returns list of tuples (rows) which fulfill criteria
 def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
+    givenArgs = (buildingName, stationName, buildingTag, truckName, food)
+    for arg in givenArgs:
+        if arg == '':
+            arg = None
+
+    print(givenArgs)
+
     with con as cursor:
-        query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s)')
-        cursor.execute(query, (buildingName,stationName,buildingTag,truckName,food))
-        print(cursor.fetchall())
-        return cursor.fetchall()
+        query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s);')
+        cursor.execute(query, (givenArgs[0],givenArgs[1],givenArgs[2],givenArgs[3],givenArgs[4]))
+        con.commit()
+        query = 'SELECT * FROM cus_filter_explore_result;'
+        cursor.execute(query)
+        print(list(cursor.fetchall()))
+        return list(cursor.fetchall())
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
