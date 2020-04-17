@@ -7,6 +7,8 @@ class HomeWindow(QtWidgets.QWidget):
     toOrderHistory = QtCore.pyqtSignal()
     toCurrentInformation = QtCore.pyqtSignal()
     toManageBuildingStation = QtCore.pyqtSignal()
+    toManageFood = QtCore.pyqtSignal()
+    toManageFoodTruck = QtCore.pyqtSignal()
 
     def __init__(self, username):
         QtWidgets.QWidget.__init__(self)
@@ -38,10 +40,10 @@ class HomeWindow(QtWidgets.QWidget):
     def currentInfo(self):
         self.toCurrentInformation.emit()
     def manageFoodTruck(self):
-        pass
+        self.toManageFoodTruck.emit()
     def foodTruckSummary(self):
         pass
     def manageBuildingStation(self):
         self.toManageBuildingStation.emit()
     def manageFood(self):
-        pass
+        self.toManageFood.emit()

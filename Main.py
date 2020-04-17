@@ -12,6 +12,10 @@ from CreateBuilding_05 import CreateBuildingWindow
 from UpdateBuilding_06 import UpdateBuildingWindow
 from CreateStation_07 import CreateStationWindow
 from UpdateStationWindow_08 import UpdateStationWindow
+from ManageFood_09 import ManageFoodWindow
+from CreateFood_10 import CreateFoodWindow
+from ManageFoodTruck_11 import ManageFoodTruckWindow
+
 
 class Controller:
     def __init__(self):
@@ -62,11 +66,21 @@ class Controller:
             self.homeWindow.close()
             self.showManageBuildingStation()
 
+        def toManageFood():
+            self.homeWindow.close()
+            self.showManageFood()
+
+        def toManageFoodTruck():
+            self.homeWindow.close()
+            self.showManageFoodTruck()
+
         self.homeWindow = HomeWindow(self.user.username)
         self.homeWindow.toExplore.connect(toExplore)
         self.homeWindow.toOrderHistory.connect(toOrderHistory)
         self.homeWindow.toCurrentInformation.connect(toCurrentInformation)
         self.homeWindow.toManageBuildingStation.connect(toManageBuildingStation)
+        self.homeWindow.toManageFood.connect(toManageFood)
+        self.homeWindow.toManageFoodTruck.connect(toManageFoodTruck)
         self.homeWindow.show()
 
     def showManageBuildingStation(self):
@@ -148,6 +162,48 @@ class Controller:
         self.updateStationWindow = UpdateStationWindow()
         self.updateStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.updateStationWindow.show()
+
+    def showManageFood(self):
+        def toHome():
+            self.manageFoodWindow.close()
+            self.showHome()
+
+        def toManageFood():
+            self.manageFoodWindow.close()
+            self.showManageFood()
+
+        def toCreateFood():
+            self.manageFoodWindow.close()
+            self.showCreateFood()
+
+        self.manageFoodWindow = ManageFoodWindow(self.user)
+        self.manageFoodWindow.toHome.connect(toHome)
+        self.manageFoodWindow.toManageFood.connect(toManageFood)
+        self.manageFoodWindow.toCreateFood.connect(toCreateFood)
+        self.manageFoodWindow.show()
+
+    def showCreateFood(self):
+        def toManageFood():
+            self.createFoodWindow.close()
+            self.showManageFood()
+
+        self.createFoodWindow = CreateFoodWindow()
+        self.createFoodWindow.toManageFood.connect(toManageFood)
+        self.createFoodWindow.show()
+
+    def showManageFoodTruck(self):
+        def toHome():
+            self.manageFoodTruckWindow.close()
+            self.showHome()
+
+        def toManageFoodTruck():
+            self.manageFoodTruckWindow.close()
+            self.showManageFoodTruck()
+
+        self.manageFoodTruckWindow = ManageFoodTruckWindow(self.user)
+        self.manageFoodTruckWindow.toHome.connect(toHome)
+        self.manageFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
+        self.manageFoodTruckWindow.show()
 
     def showExplore(self):
         def toHome():

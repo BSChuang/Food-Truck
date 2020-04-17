@@ -34,7 +34,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns the type of user (admin, employee, staff)
 def getUserType(username):
-    return "admin" # Placeholder
+    return "manager" # Placeholder
 
     admin = []
     employee = []
@@ -68,20 +68,53 @@ def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin,
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
+    print(building, description, tags)
     pass
 
 # UpdateBuilding_06
 def updateBuilding(building, description, tags):
+    print(building, description, tags)
     pass
 
 # CreateStation_07
 def insertStation(station, capacity, sponsoredBuilding):
+    print(station, capacity, sponsoredBuilding)
     pass
 
 # UpdateStation_08
 def updateStation(station, capacity, sponsoredBuilding):
+    print(station, capacity, sponsoredBuilding)
     pass
 
+# ManaageFood_09
+# Returns list of food names
+def getFoods():
+    return ["Apple", "Banana", "Chocolate"]
+
+# ManageFood_09
+# Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
+def manageFoodFilter(foodName):
+    if foodName == None: # Return list of all foods
+        return [("Apple", 10, 20), ("Banana", 1, 2)]
+    else: # Return only that food
+        return [("Banana", 1, 2)]
+
+# ManageFood_09
+# Removes the food from the database
+def deleteFood(foodName):
+    print(foodName)
+    pass
+
+# CreateFood_10
+# Inserts the new food into the database
+def insertFood(foodName):
+    print(foodName)
+    pass
+
+# ManageFoodTruck_11
+# Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
+def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
+    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
 # Explore_16 line 13
 # Returns list of all building names
