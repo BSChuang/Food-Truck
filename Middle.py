@@ -1,4 +1,5 @@
 import pymysql
+import datetime
 
 #creating a connection
 dbServerName    = "localhost"
@@ -125,10 +126,44 @@ def insertFood(foodName):
     print(foodName)
     pass
 
+# Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
+# dates should be valid dates (python datetime.date), or they will be turned to None
+# sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
+# sortedDirection should be (None, ASC, DESC)
+def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMax, sortedBy, sortedDirection) :
+    result = []
+
+    #useful info for later
+    # we can create dates to pass to mysql using datetime.date(year, month, day) out of integers
+    #until this is implemented ill just pass None jajaja   
+    if (not isinstance(dateMin, datetime.date)) :
+        dateMin = None
+        
+    if (not isinstance(dateMax, datetime.date)) :
+        dateMax = None
+        
+    with con as cursor :
+        query = 'call mn_filter_summary(%s, %s, %s, %s, %s, %s, %s);'
+        cursor.execute(query, (username, foodTruckName, stationName, dateMin, dateMax, sortedBy, sortedDirection))
+        cursor.execute('select * from mn_filter_summary_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
+    return result
+    
+
 # ManageFoodTruck_11
 # Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
-def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
-    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
+# staffMin and staffmax better fecking be numbers
+# and has capacity better be a booleeen
+def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
+    
+    with con as cursor :
+        query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
+        cursor.execute(query, (username, truckName, stationName, staffMin, staffMax, hasCapacity))
+        cursor.execute('select * from mn_filter_foodtruck_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3], data[i][4]) for i in range(0, len(data))]
+    return result #demo [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
 # Explore_16 line 13
 # Returns list of all building names
@@ -172,16 +207,19 @@ def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
         if arg == '':
             arg = None
 
-    print(givenArgs)
-
     with con as cursor:
         query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s);')
         cursor.execute(query, (givenArgs[0],givenArgs[1],givenArgs[2],givenArgs[3],givenArgs[4]))
         con.commit()
         query = 'SELECT * FROM cus_filter_explore_result;'
         cursor.execute(query)
-        print(list(cursor.fetchall()))
-        return list(cursor.fetchall())
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2].split(','), data[i][3].split(',')) for i in range(0, len(data))]
+        
+        return result
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )

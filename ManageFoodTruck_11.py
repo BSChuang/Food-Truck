@@ -54,9 +54,15 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         return newList
 
     def filter(self):
-        self.user.filtered = manageFoodTruckFilter(self.truckNameTextbox.text(), self.stationNameCombobox.currentText(), self.staffMin.text(), self.staffMax.text(), self.capacityCheckbox.isChecked())
-        self.toManageFoodTruck.emit()
-
+        try :
+            staffMin = None if self.staffMin.text() == '' else int(self.staffMin.text())
+            staffMax = None if self.staffMax.text() == '' else int(self.staffMax.text())
+            self.user.filtered = manageFoodTruckFilter(self.user.username, self.truckNameTextbox.text(), self.stationNameCombobox.currentText(), staffMin, staffMax, self.capacityCheckbox.isChecked())
+            self.toManageFoodTruck.emit()
+        except ValueError as e :
+            pass
+        
+        
     def selectFoodTruck(self):
         radio = self.sender()
         if radio.isChecked():
