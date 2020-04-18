@@ -41,6 +41,7 @@ def buildGrid(attrNames, items):
         attrNames: List of attribute names
         items: List of tuples. Each tuple should have length equal to the length of attrNames. Each item in the tuple should be a widget
     """
+
     layout = QtWidgets.QGridLayout()
     for i in range(len(attrNames)):
         layout.addWidget(buildLabel(attrNames[i]), 0, i)

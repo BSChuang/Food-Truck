@@ -12,13 +12,12 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True # Placeholder
-
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
         if cursor.fetchall != ():
             return True
+
     return False
 
 # Register_02 line ??
@@ -38,9 +37,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
-    #return "admin" # Placeholder
-    result = []
-    
+
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
@@ -72,25 +69,57 @@ def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin,
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
+    print(building, description, tags)
     pass
 
 # UpdateBuilding_06
 def updateBuilding(building, description, tags):
+    print(building, description, tags)
     pass
 
 # CreateStation_07
 def insertStation(station, capacity, sponsoredBuilding):
+    print(station, capacity, sponsoredBuilding)
     pass
 
 # UpdateStation_08
 def updateStation(station, capacity, sponsoredBuilding):
+    print(station, capacity, sponsoredBuilding)
     pass
 
+# ManaageFood_09
+# Returns list of food names
+def getFoods():
+    return ["Apple", "Banana", "Chocolate"]
+
+# ManageFood_09
+# Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
+def manageFoodFilter(foodName):
+    if foodName == None: # Return list of all foods
+        return [("Apple", 10, 20), ("Banana", 1, 2)]
+    else: # Return only that food
+        return [("Banana", 1, 2)]
+
+# ManageFood_09
+# Removes the food from the database
+def deleteFood(foodName):
+    print(foodName)
+    pass
+
+# CreateFood_10
+# Inserts the new food into the database
+def insertFood(foodName):
+    print(foodName)
+    pass
+
+# ManageFoodTruck_11
+# Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
+def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
+    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
-    return ['a', 'b', 'c'] # Placeholder
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
@@ -106,11 +135,10 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
-    return ['a', 'b', 'c'] # Placeholder
 
     result = []
     with con as cursor :
-        query = 'select distinct(buildingname) from building'
+        query = 'select distinct(stationName) from station'
         cursor.execute(query)
         result = []
         for i in cursor.fetchall():
@@ -126,7 +154,21 @@ def setUserStation(username, station):
 # Explore_16 line 55
 # Returns list of tuples (rows) which fulfill criteria
 def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
-    return [("Station One", "Building One", ["FT 1", "FT2", "FT34"], ["Apple", "Banana", "Orange"])]
+    givenArgs = (buildingName, stationName, buildingTag, truckName, food)
+    for arg in givenArgs:
+        if arg == '':
+            arg = None
+
+    print(givenArgs)
+
+    with con as cursor:
+        query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s);')
+        cursor.execute(query, (givenArgs[0],givenArgs[1],givenArgs[2],givenArgs[3],givenArgs[4]))
+        con.commit()
+        query = 'SELECT * FROM cus_filter_explore_result;'
+        cursor.execute(query)
+        print(list(cursor.fetchall()))
+        return list(cursor.fetchall())
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
