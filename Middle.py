@@ -1,4 +1,5 @@
 import pymysql
+import datetime
 
 #creating a connection
 dbServerName    = "localhost"
@@ -30,7 +31,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
-            query = "CALL register(%s, %s, %s, %s, %s, %s, %s)"
+            query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
@@ -82,32 +83,109 @@ def manageBuildingStationFilter(building, buildingTag, stationName, capacityMin,
     #demo format
     #[("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
+#ManageBuildingStationWindow_04
+# YOU CAN ONLY DELETE BUILDINGS THAT YOU JUST CREATED WITH NO MENU ITEMS
+    # DO NOT TRY TO DELETE REAL BUILDINGS
+def removeBuilding(building) :
+    with con as cursor :
+        cursor.execute('call ad_delete_building(%s);', (building))
+        con.commit()
+        
+#ManageBuildingStationWindow_04
+        # YOU CAN ONLY DELETE STATIONS YOU JUST CREATED
+def removeStation(bldgName) :
+    with con as cursor :
+        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+        data = cursor.fetchall()
+        if(len(data)>=1) :
+            cursor.execute('call ad_delete_station(%s)', (data[0][0]))
+        con.commit()
+
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
-    print(building, description, tags)
-    pass
-
+    with con as cursor :
+        cursor.execute('call ad_create_building(%s, %s);', (building, description))
+        for tag in tags :
+            cursor.execute('call ad_add_building_tag(%s, %s)', (building, tag))
+        con.commit()
+        
+#CreateBuilding_05, UpdateBuilding_06
+def addTag(building, tag) :
+    with con as cursor :
+        cursor.execute('call ad_add_building_tag(%s, %s);', (building, tag))
+        con.commit()
+        
+#CreateBuilding_05, UpdateBuilding_06
+def removeTag(building, tag) : 
+    with con as cursor :
+        cursor.execute('call ad_remove_building_tag(%s, %s);', (building, tag))
+        con.commit()
+        
+#UpdateBuilding_06, CreateBuilding_05        
+def getTags(building) :
+    with con as cursor :
+        cursor.execute('call ad_view_building_tags(%s);', (building))
+        cursor.execute('select * from ad_view_building_tags_result')
+        data = cursor.fetchall()
+        return [data[i][0] for i in range(0, len(data))]
+    
+#UpdateBuilding_06, gets the deets
+def viewBuilding(building) :
+    with con as cursor :
+        cursor.execute('call ad_view_building_general(%s);', (building))
+        cursor.execute('select * from ad_view_building_general_result')
+        data = cursor.fetchall()
+        return [data[0][0], data[0][1]]
+      
+    
 # UpdateBuilding_06
-def updateBuilding(building, description, tags):
-    print(building, description, tags)
-    pass
+#should be able to change the name
+def updateBuilding(ogbuilding, building, description):
+        with con as cursor :
+            cursor.execute('call ad_update_building(%s, %s, %s);', (ogbuilding, building, description))
+            con.commit()
 
 # CreateStation_07
 def insertStation(station, capacity, sponsoredBuilding):
-    print(station, capacity, sponsoredBuilding)
-    pass
+    with con as cursor :
+        cursor.execute('call ad_get_available_building()',)
+        cursor.execute('call ad_create_station(%s, %s, %s)', (station, sponsoredBuilding, capacity))
+        con.commit()
+ 
+# CreateStation_07
+def getAvailableBuilding() :
+    with con as cursor :
+        cursor.execute('call ad_get_available_building()',)
+        cursor.execute('select * from ad_get_available_building_result',)
+        data = cursor.fetchall()
+        return [i[0] for i in data]
 
 # UpdateStation_08
+def viewStation(bldgName) :
+    with con as cursor :
+        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+        data = cursor.fetchall()
+        if(len(data)>=1) :
+            cursor.execute('call ad_view_station(%s)', (data[0][0]))
+            cursor.execute('select * from ad_view_station_result',)
+            data = cursor.fetchall()
+            return [data[0][0], data[0][1], data[0][2]]
+        return None
+    
+# UpdateStation_08
 def updateStation(station, capacity, sponsoredBuilding):
-    print(station, capacity, sponsoredBuilding)
-    pass
+    with con as cursor:
+        cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
+        con.commit()
 
+# TODO
 # ManaageFood_09
 # Returns list of food names
 def getFoods():
     return ["Apple", "Banana", "Chocolate"]
 
+# TODO
 # ManageFood_09
 # Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
 def manageFoodFilter(foodName):
@@ -116,22 +194,58 @@ def manageFoodFilter(foodName):
     else: # Return only that food
         return [("Banana", 1, 2)]
 
+# TODO
 # ManageFood_09
 # Removes the food from the database
 def deleteFood(foodName):
     print(foodName)
     pass
 
+# TODO
 # CreateFood_10
 # Inserts the new food into the database
 def insertFood(foodName):
     print(foodName)
     pass
 
+# Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
+# dates should be valid dates (python datetime.date), or they will be turned to None
+# sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
+# sortedDirection should be (None, ASC, DESC)
+def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMax, sortedBy, sortedDirection) :
+    result = []
+
+    #useful info for later
+    # we can create dates to pass to mysql using datetime.date(year, month, day) out of integers
+    #until this is implemented ill just pass None jajaja   
+    if (not isinstance(dateMin, datetime.date)) :
+        dateMin = None
+        
+    if (not isinstance(dateMax, datetime.date)) :
+        dateMax = None
+        
+    with con as cursor :
+        query = 'call mn_filter_summary(%s, %s, %s, %s, %s, %s, %s);'
+        cursor.execute(query, (username, foodTruckName, stationName, dateMin, dateMax, sortedBy, sortedDirection))
+        cursor.execute('select * from mn_filter_summary_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
+    return result
+    
+
 # ManageFoodTruck_11
 # Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
-def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
-    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
+# staffMin and staffmax better fecking be numbers
+# and has capacity better be a booleeen
+def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
+    
+    with con as cursor :
+        query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
+        cursor.execute(query, (username, truckName, stationName, staffMin, staffMax, hasCapacity))
+        cursor.execute('select * from mn_filter_foodtruck_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3], data[i][4]) for i in range(0, len(data))]
+    return result #demo [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
 # CreateFoodTruck_12
 # returns staff of manager
@@ -169,6 +283,7 @@ def getStationNames():
 
     return result
 
+# TODO 
 # Explore_16 line 66
 # Sets the user's station location
 def setUserStation(username, station):
@@ -182,27 +297,53 @@ def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
         if arg == '':
             arg = None
 
-    print(givenArgs)
-
     with con as cursor:
         query = ('CALL cus_filter_explore(%s, %s, %s, %s, %s);')
         cursor.execute(query, (givenArgs[0],givenArgs[1],givenArgs[2],givenArgs[3],givenArgs[4]))
         con.commit()
         query = 'SELECT * FROM cus_filter_explore_result;'
         cursor.execute(query)
-        print(list(cursor.fetchall()))
-        return list(cursor.fetchall())
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2].split(','), data[i][3].split(',')) for i in range(0, len(data))]
+        
+        return result
 
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
 def getCurrentInformation(username):
-    return ("Station One", "Building One", ["ADA", "Chemistry"], "Description here", 100)
+    with con as cursor:
+        query = ('call cus_current_information_basic(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [data[0][0], data[0][1], data[0][2].split(','), data[0][3], data[0][4]]
+        
+    return result
+    # ("Station One", "Building One", ["ADA", "Chemistry"], "Description here", 100)
 
 # CurrentInformation_17 line 21
 # Returns list of tuples. Each tuple is one row --> tuple(Food truck, Manager, list(foods))
-def getTrucksAtStation(station):
-    return [("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
+def getTrucksAtStation(username):
+    with con as cursor:
+        query = ('call cus_current_information_foodtruck(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2].split(',')) for i in range(0, len(data))]
+        
+    return result
+    #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
+# TODO
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):

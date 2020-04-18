@@ -4,19 +4,19 @@ from Middle import *
 
 class CreateBuildingWindow(QtWidgets.QWidget):
     toManageBuildingStation = QtCore.pyqtSignal()
-    toCreateBuilding = QtCore.pyqtSignal()
+    toCreateBuilding = QtCore.pyqtSignal(str, str)
     
 
-    def __init__(self, user):
+    def __init__(self, user, name, desc):
         self.user = user
 
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
-        self.nameTextbox = buildTextbox()
+        self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
 
-        self.descTextbox = buildTextbox()
+        self.descTextbox = buildTextbox(False, desc)
         descLayout = buildLayout('H', [buildLabel("Description"), self.descTextbox])
 
         backButton = buildButton("Back", self.back)
@@ -40,14 +40,16 @@ class CreateBuildingWindow(QtWidgets.QWidget):
         return buildLayout('V', layoutList)
 
     def removeTag(self, tag):
+        #removeTag(self.ogbuilding, tag)
         self.user.tags.remove(tag)
-        self.toCreateBuilding.emit()
+        self.toCreateBuilding.emit(self.nameTextbox.text(), self.descTextbox.text())
 
     def addTag(self):
         text = self.newTagTextbox.text()
         if text != "" and text not in self.user.tags:
+            #addTag(self.ogbuilding, self.newTagTextbox.text())
             self.user.tags.append(self.newTagTextbox.text())
-            self.toCreateBuilding.emit()
+            self.toCreateBuilding.emit(self.nameTextbox.text(), self.descTextbox.text())
 
     def back(self):
         self.user.tags = []

@@ -1,6 +1,5 @@
 import sys
 from PyQt5 import QtCore, QtWidgets
-
 from Login_01 import LoginWindow
 from Register_02 import RegisterWindow
 from Home_03 import HomeWindow
@@ -16,6 +15,7 @@ from ManageFood_09 import ManageFoodWindow
 from CreateFood_10 import CreateFoodWindow
 from ManageFoodTruck_11 import ManageFoodTruckWindow
 from CreateFoodTruck_12 import CreateFoodTruckWindow
+from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter
 
 
 class Controller:
@@ -53,6 +53,8 @@ class Controller:
     def showHome(self):
         def toExplore():
             self.homeWindow.close()
+            #show all data
+            self.user.filtered = exploreFilter(None, None, None, None, None)
             self.showExplore()
 
         def toOrderHistory():
@@ -65,6 +67,8 @@ class Controller:
 
         def toManageBuildingStation():
             self.homeWindow.close()
+            #show def data
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         def toManageFood():
@@ -73,6 +77,8 @@ class Controller:
 
         def toManageFoodTruck():
             self.homeWindow.close()
+            # show all data when navigating to this 
+            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
         self.homeWindow = HomeWindow(self.user.username)
@@ -97,17 +103,17 @@ class Controller:
             self.manageBuildingStation.close()
             self.showCreateBuilding()
 
-        def toUpdateBuilding():
+        def toUpdateBuilding(bldg):
             self.manageBuildingStation.close()
-            self.showUpdateBuilding()
+            self.showUpdateBuilding(bldg)
 
         def toCreateStation():
             self.manageBuildingStation.close()
             self.showCreateStation()
 
-        def toUpdateStation():
+        def toUpdateStation(name, cap, bldg):
             self.manageBuildingStation.close()
-            self.showUpdateStation()
+            self.showUpdateStation(name, cap, bldg)
         
         self.manageBuildingStation = ManageBuildingStationWindow(self.user)
         self.manageBuildingStation.toHome.connect(toHome)
@@ -118,30 +124,31 @@ class Controller:
         self.manageBuildingStation.toUpdateStation.connect(toUpdateStation)
         self.manageBuildingStation.show()
 
-    def showCreateBuilding(self):
+    def showCreateBuilding(self, name = '', desc = ''):
         def toManageBuildingStation():
             self.createBuildingWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
-        def toCreateBuilding():
+        def toCreateBuilding(name, desc):
             self.createBuildingWindow.close()
-            self.showCreateBuilding()
+            self.showCreateBuilding(name, desc)
 
-        self.createBuildingWindow = CreateBuildingWindow(self.user)
+        self.createBuildingWindow = CreateBuildingWindow(self.user, name, desc)
         self.createBuildingWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.createBuildingWindow.toCreateBuilding.connect(toCreateBuilding)
         self.createBuildingWindow.show()
 
-    def showUpdateBuilding(self):
+    def showUpdateBuilding(self, bldg):
         def toManageBuildingStation():
             self.updateBuildingWindow.close()
             self.showManageBuildingStation()
 
         def toUpdateBuilding():
             self.updateBuildingWindow.close()
-            self.showUpdateBuilding()
+            self.showUpdateBuilding(bldg)
 
-        self.updateBuildingWindow = UpdateBuildingWindow(self.user)
+        self.updateBuildingWindow = UpdateBuildingWindow(self.user, bldg)
         self.updateBuildingWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.updateBuildingWindow.toUpdateBuilding.connect(toUpdateBuilding)
         self.updateBuildingWindow.show()
@@ -149,18 +156,20 @@ class Controller:
     def showCreateStation(self):
         def toManageBuildingStation():
             self.createStationWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         self.createStationWindow = CreateStationWindow()
         self.createStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.createStationWindow.show()
 
-    def showUpdateStation(self):
+    def showUpdateStation(self, name, cap, bldg):
         def toManageBuildingStation():
             self.updateStationWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
-        self.updateStationWindow = UpdateStationWindow()
+        self.updateStationWindow = UpdateStationWindow(name, cap, bldg)
         self.updateStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.updateStationWindow.show()
 
