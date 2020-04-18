@@ -24,12 +24,12 @@ class HomeWindow(QtWidgets.QWidget):
         
         # TODO Usertype now returns a list of user types because a user can belong to multiple groups
         userType = getUserType(username)
-        if 'customer' in userType:
-            layoutList = [button1, button2, button3]
-        elif 'manager' in userType:
+        if 'manager' in userType:
             layoutList = [button1, button2, button3, button4, button5]
         elif 'admin' in userType:
             layoutList = [button1, button2, button3, button6, button7]
+        elif 'customer' in userType:
+            layoutList = [button1, button2, button3]
 
         layout = buildLayout('V', [buildLabel("Home")] + layoutList)
         self.setLayout(layout)

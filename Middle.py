@@ -37,7 +37,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
-
+    result = []
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
@@ -61,7 +61,7 @@ def getUserType(username):
         
     return result
 
-# ManageBuildingStationWindow_04 line ??
+# ManageBuildingStationWindow_04 line 89
 # Returns list of tuples fulfilling criteria
 def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin, capacityMax):
     return [("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
