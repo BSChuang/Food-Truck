@@ -7,11 +7,13 @@ dbPassword      = "password"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
-con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
+#con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
 
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
+    return True # placeholder
+
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
@@ -21,7 +23,7 @@ def authenticateUser(username, password):
     return False
 
 # Register_02 line ??
-# userType must be '', 'Admin', 'Manager', 'Staff' otherwise sql will shit its pants
+# userType must be '', 'admin', 'manager', 'staff' otherwise sql will shit its pants
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
@@ -37,6 +39,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
+    return 'manager'
     result = []
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
@@ -130,9 +133,15 @@ def insertFood(foodName):
 def manageFoodTruckFilter(truckName, stationName, staffMin, staffMax, hasCapacity):
     return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
+# CreateFoodTruck_12
+# returns staff of manager
+def getStaff(manager):
+    return ["Staff 1", "Staff 2,", "Staff 3"]
+
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
+    return ['a', 'b', 'c']
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
@@ -148,6 +157,7 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
+    return ['d', 'e', 'f']
 
     result = []
     with con as cursor :

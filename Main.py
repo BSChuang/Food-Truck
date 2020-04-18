@@ -15,6 +15,7 @@ from UpdateStationWindow_08 import UpdateStationWindow
 from ManageFood_09 import ManageFoodWindow
 from CreateFood_10 import CreateFoodWindow
 from ManageFoodTruck_11 import ManageFoodTruckWindow
+from CreateFoodTruck_12 import CreateFoodTruckWindow
 
 
 class Controller:
@@ -200,10 +201,19 @@ class Controller:
             self.manageFoodTruckWindow.close()
             self.showManageFoodTruck()
 
+        def toCreateFoodTruck():
+            self.manageFoodTruckWindow.close()
+            self.showCreateFoodTruck()
+
         self.manageFoodTruckWindow = ManageFoodTruckWindow(self.user)
         self.manageFoodTruckWindow.toHome.connect(toHome)
         self.manageFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
+        self.manageFoodTruckWindow.toCreateFoodTruck.connect(toCreateFoodTruck)
         self.manageFoodTruckWindow.show()
+
+    def showCreateFoodTruck(self):
+        self.createFoodTruckWindow = CreateFoodTruckWindow()
+        self.createFoodTruckWindow.show()
 
     def showExplore(self):
         def toHome():
@@ -232,9 +242,10 @@ class Controller:
         def back():
             self.currentInformation.close()
             self.showHome()
+
         def order():
             self.currentInformation.close()
-            # self.showOrder() IMPLEMENT THIS AFTER IMPLEMENTING ORDER
+
         self.currentInformation = CurrentInformation(self.user.username)
         self.currentInformation.toHome.connect(back)
         self.currentInformation.toOrder.connect(order)

@@ -5,6 +5,7 @@ from Middle import *
 class ManageFoodTruckWindow(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toManageFoodTruck = QtCore.pyqtSignal()
+    toCreateFoodTruck = QtCore.pyqtSignal()
 
     def __init__(self, user):
         self.user = user
@@ -67,7 +68,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.toHome.emit()
 
     def create(self):
-        pass
+        self.toCreateFoodTruck.emit()
 
     def update(self):
         pass
