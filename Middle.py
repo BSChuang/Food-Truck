@@ -176,11 +176,13 @@ def updateStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
         con.commit()
 
+# TODO
 # ManaageFood_09
 # Returns list of food names
 def getFoods():
     return ["Apple", "Banana", "Chocolate"]
 
+# TODO
 # ManageFood_09
 # Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
 def manageFoodFilter(foodName):
@@ -189,12 +191,14 @@ def manageFoodFilter(foodName):
     else: # Return only that food
         return [("Banana", 1, 2)]
 
+# TODO
 # ManageFood_09
 # Removes the food from the database
 def deleteFood(foodName):
     print(foodName)
     pass
 
+# TODO
 # CreateFood_10
 # Inserts the new food into the database
 def insertFood(foodName):
@@ -269,6 +273,7 @@ def getStationNames():
 
     return result
 
+# TODO 
 # Explore_16 line 66
 # Sets the user's station location
 def setUserStation(username, station):
@@ -328,6 +333,7 @@ def getTrucksAtStation(username):
     return result
     #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
+# TODO
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):

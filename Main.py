@@ -141,7 +141,6 @@ class Controller:
     def showUpdateBuilding(self, bldg):
         def toManageBuildingStation():
             self.updateBuildingWindow.close()
-            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         def toUpdateBuilding():
