@@ -13,8 +13,9 @@ def buildLabel(text):
     userLabel.setText(text)
     return userLabel
 
-def buildTextbox(onlyInt=False):
-    textbox = QtWidgets.QLineEdit()
+def buildTextbox(onlyInt=False, defStr = ''):
+    textbox = QtWidgets.QLineEdit(defStr)
+
     if onlyInt:
         textbox.setValidator(QtGui.QIntValidator())
     return textbox

@@ -29,7 +29,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
-            query = "CALL register(%s, %s, %s, %s, %s, %s, %s)"
+            query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
@@ -80,17 +80,57 @@ def manageBuildingStationFilter(building, buildingTag, stationName, capacityMin,
     #demo format
     #[("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
+#ManageBuildingStationWindow_04
+# YOU CAN ONLY DELETE BUILDINGS THAT YOU JUST CREATED WITH NO MENU ITEMS
+    # DO NOT TRY TO DELETE REAL BUILDINGS
+def removeBuilding(building) :
+    with con as cursor :
+        cursor.execute('call ad_delete_building(%s);', (building))
+        con.commit()
+
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
-    print(building, description, tags)
-    pass
-
+    with con as cursor :
+        cursor.execute('call ad_create_building(%s, %s);', (building, description))
+        for tag in tags :
+            cursor.execute('call ad_add_building_tag(%s, %s)', (building, tag))
+        con.commit()
+        
+#CreateBuilding_05: Ben im pretty sure you're gonna need this
+def addTag(building, tag) :
+    with con as cursor :
+        cursor.execute('call ad_add_building_tag(%s, %s);', (building, tag))
+        con.commit()
+        
+#CreateBuilding_05: Ben you'll need this too
+def removeTag(building, tag) : 
+    with con as cursor :
+        cursor.execute('call ad_remove_building_tag(%s, %s);', (building, tag))
+        con.commit()
+        
+#UpdateBuilding_06, CreateBuilding_05        
+def getTags(building) :
+    with con as cursor :
+        cursor.execute('call ad_view_building_tags(%s);', (building))
+        cursor.execute('select * from ad_view_building_tags_result')
+        data = cursor.fetchall()
+        return [data[i][0] for i in range(0, len(data))]
+    
+def viewBuilding(building) :
+    with con as cursor :
+        cursor.execute('call ad_view_building_general(%s);', (building))
+        cursor.execute('select * from ad_view_building_general_result')
+        data = cursor.fetchall()
+        return [data[0][0], data[0][1]]
+    
 # UpdateBuilding_06
-def updateBuilding(building, description, tags):
-    print(building, description, tags)
-    pass
-
+#should be able to change the name
+def updateBuilding(ogbuilding, building, description):
+        with con as cursor :
+            cursor.execute('call ad_update_building(%s, %s, %s);', (ogbuilding, building, description))
+            con.commit()
+    
 # CreateStation_07
 def insertStation(station, capacity, sponsoredBuilding):
     print(station, capacity, sponsoredBuilding)

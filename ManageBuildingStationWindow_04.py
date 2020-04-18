@@ -6,7 +6,7 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toManageBuildingStation = QtCore.pyqtSignal()
     toCreateBuilding = QtCore.pyqtSignal()
-    toUpdateBuilding = QtCore.pyqtSignal()
+    toUpdateBuilding = QtCore.pyqtSignal(str)
     toCreateStation = QtCore.pyqtSignal()
     toUpdateStation = QtCore.pyqtSignal()
 
@@ -14,6 +14,7 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
+        self.selectedBuilding = None
         
         self.buildingNameCombobox = buildComboBox(getBuildingNames()) # you're probably wondering why I added this blank first
         # well the building name field can be left blank to see all buildings
@@ -69,9 +70,12 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
     def createBuilding(self):
         self.toCreateBuilding.emit()
     def updateBuilding(self):
-        self.toUpdateBuilding.emit()
+        #only go to update building if theres one selected
+        if not(self.selectedBuilding == None) : 
+            self.toUpdateBuilding.emit(self.selectedBuilding)
     def deleteBuilding(self):
-        pass
+        removeBuilding(self.selectedBuilding)
+        self.filter()
     def createStation(self):
         self.toCreateStation.emit()
     def updateStation(self):

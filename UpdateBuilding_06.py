@@ -7,23 +7,25 @@ class UpdateBuildingWindow(QtWidgets.QWidget):
     toUpdateBuilding = QtCore.pyqtSignal()
     
 
-    def __init__(self, user):
+    def __init__(self, user, ogbuilding):
         self.user = user
-
+        self.ogbuilding = ogbuilding
+        self.info = viewBuilding(ogbuilding) #[name, description]
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-
-        self.nameTextbox = buildTextbox()
+        self.user.tags = getTags(ogbuilding)
+        
+        self.nameTextbox = buildTextbox(False, self.info[0])
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
 
-        self.descTextbox = buildTextbox()
+        self.descTextbox = buildTextbox(False, self.info[1])
         descLayout = buildLayout('H', [buildLabel("Description"), self.descTextbox])
 
         backButton = buildButton("Back", self.back)
         updateButton = buildButton("Update", self.update)
         buttonsLayout = buildLayout('H', [backButton, updateButton])
 
-        layout = buildLayout('V', [buildLabel("Update Building"), nameLayout, descLayout, buildLabel("Tags"), self.buildTags(user.tags), buttonsLayout])
+        layout = buildLayout('V', [buildLabel("Update Building"), nameLayout, descLayout, buildLabel("Tags"), self.buildTags(self.user.tags), buttonsLayout])
 
         self.setLayout(layout)
 
@@ -40,12 +42,14 @@ class UpdateBuildingWindow(QtWidgets.QWidget):
         return buildLayout('V', layoutList)
 
     def removeTag(self, tag):
+        removeTag(self.ogbuilding, tag)
         self.user.tags.remove(tag)
         self.toUpdateBuilding.emit()
 
     def addTag(self):
         text = self.newTagTextbox.text()
         if text != "" and text not in self.user.tags:
+            addTag(self.ogbuilding, self.newTagTextbox.text())
             self.user.tags.append(self.newTagTextbox.text())
             self.toUpdateBuilding.emit()
 
@@ -54,7 +58,7 @@ class UpdateBuildingWindow(QtWidgets.QWidget):
         self.toManageBuildingStation.emit()
 
     def update(self):
-        names = getBuildingNames()
-        if self.nameTextbox.text() in names:
-            updateBuilding(self.nameTextbox.text(), self.descTextbox.text(), self.user.tags)
+        #names = getBuildingNames()
+        #if self.nameTextbox.text() in names:
+        updateBuilding(self.ogbuilding, self.nameTextbox.text(), self.descTextbox.text())
         self.back()
