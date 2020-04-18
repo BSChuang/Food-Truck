@@ -62,9 +62,22 @@ def getUserType(username):
     return result
 
 # ManageBuildingStationWindow_04 line 89
-# Returns list of tuples fulfilling criteria
-def manageBuildingStationFilter(building, BuildingTag, stationName, capacityMin, capacityMax):
-    return [("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
+# Returns list of tuples fulfilling criteria, use None or empty str if field is blank
+# if we want different values to come back to replace nulls in the database, change value on line labeled 'deal with nulls'
+def manageBuildingStationFilter(building, buildingTag, stationName, capacityMin, capacityMax):
+    result = []
+    with con as cursor :
+        query = 'call ad_filter_building_station(%s, %s, %s, %s, %s);'
+        cursor.execute(query, (building, buildingTag, stationName, capacityMin, capacityMax))
+        cursor.execute('select * from ad_filter_building_station_result',)
+        data = cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1].split(','), data[i][2], data[i][3], data[i][4].split(',')) for i in range(0, len(data))]
+    return result
+    #demo format
+    #[("Building One", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"]), ("Building Two", ["ADA", "Chemistry"], "Station One", "4", ["Food Truck One", "FT2"])]
 
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
@@ -126,7 +139,7 @@ def getBuildingNames():
         cursor.execute(query)
         nested_list = cursor.fetchall()
 
-    buildings = []
+    buildings = [''] # we need an empty string at the beginning so the drop down boxes can start empty
     for li in nested_list:
         buildings.append(li[0])
 
@@ -140,7 +153,7 @@ def getStationNames():
     with con as cursor :
         query = 'select distinct(stationName) from station'
         cursor.execute(query)
-        result = []
+        result = [''] # we need an empty string at the beginning so the drop down boxes can start empty
         for i in cursor.fetchall():
             result.append(tuple(i)[0])
 

@@ -14,8 +14,9 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-
-        self.buildingNameCombobox = buildComboBox(getBuildingNames())
+        
+        self.buildingNameCombobox = buildComboBox(getBuildingNames()) # you're probably wondering why I added this blank first
+        # well the building name field can be left blank to see all buildings
         buildingNameLayout = buildLayout('H', [buildLabel("Building Name"), self.buildingNameCombobox])
 
         self.buildingTagTextbox = buildTextbox()
@@ -23,7 +24,9 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
 
         hLayout1 = buildLayout('H', [buildingNameLayout, buildingTagLayout])
 
-        self.stationNameCombobox = buildComboBox(getStationNames())
+        stationNames = getStationNames() 
+        self.stationNameCombobox = buildComboBox(getStationNames())# you're probably wondering why I added this blank first
+        # well the station name field can be left blank to not apply the station filter
         stationNameLayout = buildLayout('H', [buildLabel("Station Name"), self.stationNameCombobox])
 
         self.capacityMin = buildTextbox(True)
@@ -83,11 +86,13 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
 
     def filter(self):
         try:
-            capacityMin = int(self.capacityMin.text())
-            capacityMax = int(self.capacityMax.text())
-            if self.buildingNameCombobox.currentText() and self.buildingTagTextbox.text() and self.stationNameCombobox.currentText() and self.capacityMin.text() and self.capacityMax.text() and capacityMin < capacityMax:
-                self.user.filtered = manageBuildingStationFilter(self.buildingNameCombobox.currentText(), self.buildingTagTextbox.text(), self.stationNameCombobox.currentText(), self.capacityMin.text(), self.capacityMax.text())
-                self.toManageBuildingStation.emit()
+            #empty text boxes mean dont filter, replace with None to tell sql that
+            capacityMin = None if self.capacityMin.text() == '' else int(self.capacityMin.text())
+            capacityMax = None if self.capacityMax.text() == '' else int(self.capacityMax.text())
+            #if self.buildingNameCombobox.currentText() and self.buildingTagTextbox.text() and self.stationNameCombobox.currentText() and self.capacityMin.text() and self.capacityMax.text() and capacityMin < capacityMax:
+            
+            self.user.filtered = manageBuildingStationFilter(self.buildingNameCombobox.currentText(), self.buildingTagTextbox.text(), self.stationNameCombobox.currentText(), capacityMin, capacityMax)
+            self.toManageBuildingStation.emit()
         except ValueError as e:
             pass
 
