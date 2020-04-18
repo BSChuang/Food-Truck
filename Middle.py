@@ -87,6 +87,16 @@ def removeBuilding(building) :
     with con as cursor :
         cursor.execute('call ad_delete_building(%s);', (building))
         con.commit()
+        
+#ManageBuildingStationWindow_04
+        # YOU CAN ONLY DELETE STATIONS YOU JUST CREATED
+def removeStation(bldgName) :
+    with con as cursor :
+        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+        data = cursor.fetchall()
+        if(len(data)>=1) :
+            cursor.execute('call ad_delete_station(%s)', (data[0][0]))
+        con.commit()
 
 # CreateBuilding_05 line 
 # Inserts building into database. Tags is an array of tags
@@ -97,13 +107,13 @@ def insertBuilding(building, description, tags):
             cursor.execute('call ad_add_building_tag(%s, %s)', (building, tag))
         con.commit()
         
-#CreateBuilding_05: Ben im pretty sure you're gonna need this
+#CreateBuilding_05, UpdateBuilding_06
 def addTag(building, tag) :
     with con as cursor :
         cursor.execute('call ad_add_building_tag(%s, %s);', (building, tag))
         con.commit()
         
-#CreateBuilding_05: Ben you'll need this too
+#CreateBuilding_05, UpdateBuilding_06
 def removeTag(building, tag) : 
     with con as cursor :
         cursor.execute('call ad_remove_building_tag(%s, %s);', (building, tag))
@@ -117,12 +127,14 @@ def getTags(building) :
         data = cursor.fetchall()
         return [data[i][0] for i in range(0, len(data))]
     
+#UpdateBuilding_06, gets the deets
 def viewBuilding(building) :
     with con as cursor :
         cursor.execute('call ad_view_building_general(%s);', (building))
         cursor.execute('select * from ad_view_building_general_result')
         data = cursor.fetchall()
         return [data[0][0], data[0][1]]
+      
     
 # UpdateBuilding_06
 #should be able to change the name
@@ -130,16 +142,39 @@ def updateBuilding(ogbuilding, building, description):
         with con as cursor :
             cursor.execute('call ad_update_building(%s, %s, %s);', (ogbuilding, building, description))
             con.commit()
-    
+
 # CreateStation_07
 def insertStation(station, capacity, sponsoredBuilding):
-    print(station, capacity, sponsoredBuilding)
-    pass
+    with con as cursor :
+        cursor.execute('call ad_get_available_building()',)
+        cursor.execute('call ad_create_station(%s, %s, %s)', (station, sponsoredBuilding, capacity))
+        con.commit()
+ 
+# CreateStation_07
+def getAvailableBuilding() :
+    with con as cursor :
+        cursor.execute('call ad_get_available_building()',)
+        cursor.execute('select * from ad_get_available_building_result',)
+        data = cursor.fetchall()
+        return [i[0] for i in data]
 
 # UpdateStation_08
+def viewStation(bldgName) :
+    with con as cursor :
+        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+        data = cursor.fetchall()
+        if(len(data)>=1) :
+            cursor.execute('call ad_view_station(%s)', (data[0][0]))
+            cursor.execute('select * from ad_view_station_result',)
+            data = cursor.fetchall()
+            return [data[0][0], data[0][1], data[0][2]]
+        return None
+    
+# UpdateStation_08
 def updateStation(station, capacity, sponsoredBuilding):
-    print(station, capacity, sponsoredBuilding)
-    pass
+    with con as cursor:
+        cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
+        con.commit()
 
 # ManaageFood_09
 # Returns list of food names

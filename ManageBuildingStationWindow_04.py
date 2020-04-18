@@ -8,7 +8,7 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
     toCreateBuilding = QtCore.pyqtSignal()
     toUpdateBuilding = QtCore.pyqtSignal(str)
     toCreateStation = QtCore.pyqtSignal()
-    toUpdateStation = QtCore.pyqtSignal()
+    toUpdateStation = QtCore.pyqtSignal(str, int, str)
 
     def __init__(self, user):
         self.user = user
@@ -79,9 +79,13 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
     def createStation(self):
         self.toCreateStation.emit()
     def updateStation(self):
-        self.toUpdateStation.emit()
+        if not (self.selectedBuilding == None or viewStation(self.selectedBuilding) == None) :
+            station = viewStation(self.selectedBuilding)
+            self.toUpdateStation.emit(station[0], station[1], station[2])
     def deleteStation(self):
-        pass
+        removeStation(self.selectedBuilding)
+        self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
+        self.toManageBuildingStation.emit()
 
     def selectBuilding(self):
         radio = self.sender()

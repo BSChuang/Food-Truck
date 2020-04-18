@@ -110,9 +110,9 @@ class Controller:
             self.manageBuildingStation.close()
             self.showCreateStation()
 
-        def toUpdateStation():
+        def toUpdateStation(name, cap, bldg):
             self.manageBuildingStation.close()
-            self.showUpdateStation()
+            self.showUpdateStation(name, cap, bldg)
         
         self.manageBuildingStation = ManageBuildingStationWindow(self.user)
         self.manageBuildingStation.toHome.connect(toHome)
@@ -156,18 +156,20 @@ class Controller:
     def showCreateStation(self):
         def toManageBuildingStation():
             self.createStationWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         self.createStationWindow = CreateStationWindow()
         self.createStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.createStationWindow.show()
 
-    def showUpdateStation(self):
+    def showUpdateStation(self, name, cap, bldg):
         def toManageBuildingStation():
             self.updateStationWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
-        self.updateStationWindow = UpdateStationWindow()
+        self.updateStationWindow = UpdateStationWindow(name, cap, bldg)
         self.updateStationWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.updateStationWindow.show()
 

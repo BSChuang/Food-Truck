@@ -15,7 +15,7 @@ class CreateStationWindow(QtWidgets.QWidget):
         self.capacityTextbox = buildTextbox(True)
         capacityLayout = buildLayout('H', [buildLabel("Capacity"), self.capacityTextbox])
 
-        self.sponsoredCombobox = buildComboBox(getBuildingNames())
+        self.sponsoredCombobox = buildComboBox(getAvailableBuilding())
         sponsoredLayout = buildLayout('H', [buildLabel("Sponsored Building"), self.sponsoredCombobox])
 
         hLayout = buildLayout('H', [capacityLayout, sponsoredLayout])        
@@ -32,5 +32,6 @@ class CreateStationWindow(QtWidgets.QWidget):
         self.toManageBuildingStation.emit()
 
     def create(self):
-        insertStation(self.nameTextbox.text(), self.capacityTextbox.text(), self.sponsoredCombobox.currentText())
-        self.back()
+        if(not self.nameTextbox.text() == '' and int(self.capacityTextbox.text()) >= 0) :
+            insertStation(self.nameTextbox.text(), int(self.capacityTextbox.text()), self.sponsoredCombobox.currentText())
+            self.back()

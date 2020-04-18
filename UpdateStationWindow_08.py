@@ -5,17 +5,19 @@ from Middle import *
 class UpdateStationWindow(QtWidgets.QWidget):
     toManageBuildingStation = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, name, cap, bldg):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
+        self.bldgs = getAvailableBuilding() # available buildings + current building
+        self.bldgs.insert(0, bldg)
+        self.name = name
+        self.nameLabel = buildLabel(self.name)
+        nameLayout = buildLayout('H', [buildLabel("Name"), self.nameLabel])
 
-        self.nameTextbox = buildTextbox()
-        nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
-
-        self.capacityTextbox = buildTextbox(True)
+        self.capacityTextbox = buildTextbox(True, str(cap))
         capacityLayout = buildLayout('H', [buildLabel("Capacity"), self.capacityTextbox])
 
-        self.sponsoredCombobox = buildComboBox(getBuildingNames())
+        self.sponsoredCombobox = buildComboBox(self.bldgs)
         sponsoredLayout = buildLayout('H', [buildLabel("Sponsored Building"), self.sponsoredCombobox])
 
         hLayout = buildLayout('H', [capacityLayout, sponsoredLayout])        
@@ -32,5 +34,6 @@ class UpdateStationWindow(QtWidgets.QWidget):
         self.toManageBuildingStation.emit()
 
     def update(self):
-        updateStation(self.nameTextbox.text(), self.capacityTextbox.text(), self.sponsoredCombobox.currentText())
-        self.back()
+        if(int(self.capacityTextbox.text()) >= 0) :
+            updateStation(self.name, int(self.capacityTextbox.text()), self.sponsoredCombobox.currentText())
+            self.back()
