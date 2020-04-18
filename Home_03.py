@@ -19,13 +19,14 @@ class HomeWindow(QtWidgets.QWidget):
         button5 = buildButton("View Food Truck Summary", self.foodTruckSummary)
         button6 = buildButton("Manage Building and Station", self.manageBuildingStation)
         button7 = buildButton("Manage Food", self.manageFood)
-
+        
+        # TODO Usertype now returns a list of user types because a user can belong to multiple groups
         userType = getUserType(username)
-        if userType == "customer":
+        if 'customer' in userType:
             layoutList = [button1, button2, button3]
-        elif userType == "manager":
+        elif 'manager' in userType:
             layoutList = [button1, button2, button3, button4, button5]
-        elif userType == "admin":
+        elif 'admin' in userType:
             layoutList = [button1, button2, button3, button6, button7]
 
         layout = buildLayout('V', [buildLabel("Home")] + layoutList)

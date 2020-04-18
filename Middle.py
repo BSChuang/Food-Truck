@@ -3,11 +3,11 @@ import pymysql
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "gojackets"
+dbPassword      = "password"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
-#con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
+con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=dbName, charset=charSet)
 
 # Login_01 line 31
 # Returns True or False
@@ -22,43 +22,47 @@ def authenticateUser(username, password):
     return False
 
 # Register_02 line ??
-# Return True if able to add user, False otherwise
+# userType must be '', 'Admin', 'Manager', 'Staff' otherwise sql will shit its pants
+# Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
+            #cant pass null to sql, as long as no email is given they won't be added to admin table
+            if userType == None or userType == '' :
+                userType = 'Admin'
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
-    return True
+    return True 
 
 # Home_03 line 22
-# Returns the type of user (admin, employee, staff)
+# Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
-    return "admin" # Placeholder
-
-    admin = []
-    employee = []
-    staff = []
-
+    #return "admin" # Placeholder
+    result = []
+    
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
-        admin = cursor.fetchall()[0][0]
+        if cursor.fetchall()[0][0] > 0:
+            result.append( 'admin')
 
-        query = "SELECT COUNT(username) FROM employee WHERE username = %s"
+        query = "SELECT COUNT(username) FROM manager WHERE username = %s"
         cursor.execute(query, (username))
-        emloyee = cursor.fetchall()[0][0]
+        if cursor.fetchall()[0][0] > 0 :
+            result.append('manager')
 
         query = "SELECT COUNT(username) FROM staff WHERE username = %s"
         cursor.execute(query, (username))
-        staff = cursor.fetchall()[0][0]
-
-    if admin == 1:
-        return "admin"
-    elif employee == 1:
-        return "employee"
-    else:
-        return "staff"
+        if cursor.fetchall()[0][0] > 0 :
+            result.append('staff')
+        
+        query = "SELECT COUNT(username) FROM customer WHERE username = %s"
+        cursor.execute(query, (username))
+        if cursor.fetchall()[0][0] > 0 :
+            result.append('customer')
+        
+    return result
 
 # ManageBuildingStationWindow_04 line ??
 # Returns list of tuples fulfilling criteria
