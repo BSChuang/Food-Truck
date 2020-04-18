@@ -52,6 +52,8 @@ class Controller:
     def showHome(self):
         def toExplore():
             self.homeWindow.close()
+            #show all data
+            self.user.filtered = exploreFilter(None, None, None, None, None)
             self.showExplore()
 
         def toOrderHistory():
@@ -64,6 +66,8 @@ class Controller:
 
         def toManageBuildingStation():
             self.homeWindow.close()
+            #show def data
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         def toManageFood():
@@ -72,6 +76,8 @@ class Controller:
 
         def toManageFoodTruck():
             self.homeWindow.close()
+            # show all data when navigating to this 
+            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
         self.homeWindow = HomeWindow(self.user.username)

@@ -224,12 +224,34 @@ def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
 # CurrentInformation_17 line 13
 # Returns tuple(station name, building name, )
 def getCurrentInformation(username):
-    return ("Station One", "Building One", ["ADA", "Chemistry"], "Description here", 100)
+    with con as cursor:
+        query = ('call cus_current_information_basic(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [data[0][0], data[0][1], data[0][2].split(','), data[0][3], data[0][4]]
+        
+    return result
+    # ("Station One", "Building One", ["ADA", "Chemistry"], "Description here", 100)
 
 # CurrentInformation_17 line 21
 # Returns list of tuples. Each tuple is one row --> tuple(Food truck, Manager, list(foods))
-def getTrucksAtStation(station):
-    return [("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
+def getTrucksAtStation(username):
+    with con as cursor:
+        query = ('call cus_current_information_foodtruck(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data= cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2].split(',')) for i in range(0, len(data))]
+        
+    return result
+    #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)

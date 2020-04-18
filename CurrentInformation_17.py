@@ -18,7 +18,7 @@ class CurrentInformation(QtWidgets.QWidget):
         hLayout4 = buildLayout('H', [buildLabel("Building Description: "), buildLabel(description)])
         hLayout5 = buildLayout('H', [buildLabel("Balance: "), buildLabel(str(balance))])
 
-        trucks = getTrucksAtStation(station)
+        trucks = getTrucksAtStation(username)
         trucks = self.formatForGrid(trucks)
 
         grid = buildGrid(["Food Truck", "Manager", "Food(s)"], trucks)
