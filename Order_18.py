@@ -32,7 +32,7 @@ class OrderWindow(QtWidgets.QWidget):
             foodName = buildLabel(row[0])
             price = buildLabel(str(row[1]))
             quantityTextbox = buildTextbox(True)
-            self.purchaseQuantities.append((foodName, quantityTextbox))
+            self.purchaseQuantities.append((row[0], quantityTextbox))
 
             newList.append((foodName, price, quantityTextbox))
         return newList
@@ -42,10 +42,10 @@ class OrderWindow(QtWidgets.QWidget):
         purchases = []
         for tup in self.purchaseQuantities:
             if tup[1].text():
-                purchases.append((tup[0], tup[1]))
+                purchases.append((tup[0], int(tup[1].text())))
         
-        if len(purchases) != 0:       
-            submitOrder(user.username, user.selectedTruck, purchases, date)
+        if len(purchases) != 0:
+            submitOrder(self.user.username, self.user.selectedTruck, purchases, date)
             self.back()
 
     def back(self):
