@@ -452,10 +452,6 @@ def viewFoodTruckAvailableStaff(username, foodTruckName):
     return result
 
 # foodtruck something, query 20b
-<<<<<<< HEAD
-def viewFoodTruckStaff(username):
-    pass
-=======
 def viewFoodTruckStaff(foodTruckName):
     with con as cursor:
         query = ('call mn_view_foodTruck_staff(%s);')
@@ -464,14 +460,13 @@ def viewFoodTruckStaff(foodTruckName):
         data = cursor.fetchall()
         result = [(data[i][1]) for i in range(0, len(data))]
     return result
->>>>>>> 42d770cfe33ce3594ec78f0e9ba3b79cce78a78c
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(truckName):
+def viewFoodTruckMenu(foodTruckName):
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
-        cursor.execute(query, (truckName))
+        cursor.execute(query, (foodTruckName))
         result = cursor.fetchall()
 
     return result
