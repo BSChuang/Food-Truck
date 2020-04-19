@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "password"#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -239,8 +239,8 @@ def deleteFoodTruck(foodTruckName) :
     except IntegrityError :
         return False
 
-    
-    
+
+
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
 # sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
@@ -425,9 +425,6 @@ def submitOrder(username, truck, purchases, date):
 
     return True
 
-
-
-
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
@@ -443,3 +440,34 @@ def getOrderHistory(username):
 
     return result
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
+
+# foodtruck something, query 20a
+def viewFoodTruckAvailableStaff(username, foodTruckName):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_available_staff(%s,%s);')
+        cursor.execute(query, (username, foodTruckName))
+        query = ('select * from mn_view_foodTruck_available_staff_result')
+        cursor.execute(query, )
+        data = cursor.fetchall()
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
+
+# foodtruck something, query 20b
+def viewFoodTruckStaff(foodTruckName):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_staff(%s);')
+        cursor.execute(query, (foodTruckName))
+        con.commit()
+        data = cursor.fetchall()
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
+
+# foodtruck something, query 21
+def viewFoodTruckMenu(foodTruckName):
+    result = []
+    with con as cursor:
+        query = 'CALL mn_view_foodTruck_menu(%s);'
+        cursor.execute(query, (foodTruckName))
+        data = cursor.fetchall()
+        result = [(data[i][2]) for i in range(0, len(data))]
+    return result

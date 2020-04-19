@@ -620,13 +620,13 @@ BEGIN
     DROP TABLE IF EXISTS mn_view_foodTruck_staff_result;
     CREATE TABLE mn_view_foodTruck_staff_result(assignedStaff varchar(100))
     SELECT CONCAT(firstName , ' ' , lastName)
-    FROM FOOD_TRUCK
+    FROM FOODTRUCK
     INNER JOIN STAFF
-    ON FOOD_TRUCK.foodTruckName = STAFF.foodTruckName
+    ON FOODTRUCK.foodTruckName = STAFF.foodTruckName
     INNER JOIN USER
     ON STAFF.username = USER.username
     WHERE
-    (i_foodTruckName = foodTruckName);
+    (i_foodTruckName = FOODTRUCK.foodTruckName);
 
 END //
 DELIMITER ;

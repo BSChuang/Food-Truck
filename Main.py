@@ -227,9 +227,9 @@ class Controller:
             self.manageFoodTruckWindow.close()
             self.showCreateFoodTruck()
 
-        def toUpdateFoodTruck():
+        def toUpdateFoodTruck(name, station):
             self.manageFoodTruckWindow.close()
-            self.showUpdateFoodTruck()
+            self.showUpdateFoodTruck(name, station)
 
         self.manageFoodTruckWindow = ManageFoodTruckWindow(self.user)
         self.manageFoodTruckWindow.toHome.connect(toHome)
@@ -238,30 +238,30 @@ class Controller:
         self.manageFoodTruckWindow.toUpdateFoodTruck.connect(toUpdateFoodTruck)
         self.manageFoodTruckWindow.show()
 
-    def showCreateFoodTruck(self):
+    def showCreateFoodTruck(self, name = '', station = '', assignedStaff = None):
         def toManageFoodTruck():
             self.createFoodTruckWindow.close()
             self.showManageFoodTruck()
 
-        def toCreateFoodTruck():
+        def toCreateFoodTruck(name, station, assignedStaff):
             self.createFoodTruckWindow.close()
-            self.showCreateFoodTruck()
+            self.showCreateFoodTruck(name, station, assignedStaff)
 
-        self.createFoodTruckWindow = CreateFoodTruckWindow(self.user)
+        self.createFoodTruckWindow = CreateFoodTruckWindow(self.user, name, station, assignedStaff)
         self.createFoodTruckWindow.toCreateFoodTruck.connect(toCreateFoodTruck)
         self.createFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
         self.createFoodTruckWindow.show()
 
-    def showUpdateFoodTruck(self):
+    def showUpdateFoodTruck(self, name = '', station = '', assignedStaff = None):
         def toManageFoodTruck():
             self.updateFoodTruckWindow.close()
             self.showManageFoodTruck()
-
-        def toUpdateFoodTruck():
+        
+        def toUpdateFoodTruck(name, station, assignedStaff):
             self.updateFoodTruckWindow.close()
-            self.showUpdateFoodTruck()
+            self.showUpdateFoodTruck(name, station, assignedStaff)
 
-        self.updateFoodTruckWindow = UpdateFoodTruckWindow(self.user)
+        self.updateFoodTruckWindow = UpdateFoodTruckWindow(self.user, name, station, assignedStaff)
         self.updateFoodTruckWindow.toUpdateFoodTruck.connect(toUpdateFoodTruck)
         self.updateFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
         self.updateFoodTruckWindow.show()
@@ -352,6 +352,7 @@ class User:
 
 
 def main():
+    QtWidgets.QApplication.setStyle('Fusion')
     app = QtWidgets.QApplication(sys.argv)
     controller = Controller()
     controller.showLogin()
