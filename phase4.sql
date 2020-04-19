@@ -559,10 +559,7 @@ DELIMITER //
 CREATE PROCEDURE mn_create_foodTruck_add_staff(IN i_foodTruckName VARCHAR(50), IN i_staffName VARCHAR(50))
 BEGIN
 
--- 	INSERT INTO STAFF(username, foodTruckName)
--- 	VALUES (i_staffName, i_foodTruckName);
-
-	UPDATE STAFF
+UPDATE STAFF
     SET foodTruckName = i_foodTruckName
     WHERE username = i_staffName;
 
@@ -630,7 +627,7 @@ BEGIN
     INNER JOIN USER
     ON STAFF.username = USER.username
     WHERE
-    (i_foodTruckName = FOODTRUCK.foodTruckName);
+    (i_foodTruckName = foodtruck.foodTruckName);
 
 END //
 DELIMITER ;
@@ -737,7 +734,7 @@ BEGIN
         OrderDetail ON Orders.orderID = OrderDetail.orderID
         INNER JOIN
         MenuItem ON (OrderDetail.foodName = MenuItem.foodName AND OrderDetail.foodTruckName = MenuItem.foodTruckName)
-        INNER JOIN
+        RIGHT OUTER JOIN
         FoodTruck ON OrderDetail.foodTruckName = FoodTruck.foodTruckName
         WHERE
         (i_managerUsername = FoodTruck.managerUsername) AND
