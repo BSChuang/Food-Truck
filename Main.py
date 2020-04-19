@@ -142,6 +142,7 @@ class Controller:
 
         def toCreateBuilding(name, desc):
             self.createBuildingWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showCreateBuilding(name, desc)
 
         self.createBuildingWindow = CreateBuildingWindow(self.user, name, desc)
@@ -152,10 +153,12 @@ class Controller:
     def showUpdateBuilding(self, bldg):
         def toManageBuildingStation():
             self.updateBuildingWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showManageBuildingStation()
 
         def toUpdateBuilding():
             self.updateBuildingWindow.close()
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
             self.showUpdateBuilding(bldg)
 
         self.updateBuildingWindow = UpdateBuildingWindow(self.user, bldg)

@@ -1,6 +1,7 @@
 import sys
 import pymysql
 import datetime
+from pymysql import IntegrityError
 
 #creating a connection
 dbServerName    = "localhost"
@@ -223,6 +224,20 @@ def insertFood(foodName):
 
     return True
 
+#Screen 11
+# returns true if successful, false otw
+def deleteFoodTruck(foodTruckName) :
+    try :
+        with con as cursor:
+            query = 'CALL mn_delete_foodTruck(%s)'
+            cursor.execute(query, foodTruckName)
+            con.commit()
+            return True
+    except IntegrityError :
+        return False
+
+    
+    
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
 # sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
@@ -389,8 +404,9 @@ def submitOrder(username, truck, purchases, date):
         cursor.execute(query)
         ID = cursor.fetchall()[0][0]
         print(ID)
-        query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
-        cursor.execute(query, (truck, purchases[0][0], purchases[0][1], ID))
+        for purch in purchases :
+            query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
+            cursor.execute(query, (truck, purch[0], purch[1], ID))
         con.commit()
 
     return True
@@ -409,7 +425,7 @@ def getOrderHistory(username):
         # deal with null values
         data = [['' if j is None else j for j in i] for i in data]
         # reformat
-        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][2]) for i in range(0, len(data))]
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][4]) for i in range(0, len(data))]
 
     return result
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
