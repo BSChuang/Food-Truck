@@ -52,8 +52,13 @@ class ExploreWindow(QtWidgets.QWidget):
         for row in rows:
             station = buildRadioButton(row[0], self.selectStation)
             building = buildLabel(row[1])
+<<<<<<< HEAD
             trucks = buildLabel(listToString(row[2])+'\n')
             foods = buildLabel(listToString(row[3]))
+=======
+            trucks = buildLabel(threeListToString(row[2]))
+            foods = buildLabel(threeListToString(row[3]))
+>>>>>>> fa23b851f261f34b5c51b4a20395461314de550b
             newList.append((station, building, trucks, foods))
         return newList
 
