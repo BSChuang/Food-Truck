@@ -9,10 +9,9 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
     
     def __init__(self, user, name, station, staffList):
         self.user = user
-        
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-
+        self.user.menuItems = viewFoodTruckMenu(name) 
         self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
         
@@ -26,7 +25,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
 
         self.staff = CheckableComboBox()
         if staffList == None :
-            self.staff.addItems(getStaff(self.user.username))
+            self.staff.addItems(viewFooodTrucksAvailableStaff(self.user.username, name))
         else :
             self.staff.addItems(staffList)
 

@@ -25,7 +25,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         self.staff = CheckableComboBox()
 		
         if staffList == None :
-            self.staff.addItems(getStaff(self.user.username))
+            self.staff.addItems(viewFoodTrucksAvailableStaff(self.user.username, name))
         else :
             self.staff.addItems(staffList)
 
