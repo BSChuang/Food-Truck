@@ -27,18 +27,12 @@ def authenticateUser(username, password):
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
-            #cant pass null to sql, as long as no email is given they won't be added to admin table
-            if userType == None or userType == '' :
-                userType = 'Admin'
-
-            try:
-                query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-                cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
-                con.commit()
-            except pymysql.err.IntegrityError: #duplicate entries i.e. 2X "Jane Doe"
-                print('Duplicate Entry')
-                return False
-
+        try:
+            query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
+            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
+            con.commit()
+        except pymysql.err.IntegrityError:
+            return False
     return True
 
 # Home_03 line 22
@@ -433,6 +427,7 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
+    print(truckName)
     menu = ()
     with con as cursor:
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
