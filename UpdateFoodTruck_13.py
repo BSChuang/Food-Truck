@@ -81,12 +81,14 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
             if staff == '':
                 staffList.remove('')
         print(staffList)
-# TODO change name with ogname
+
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
-            updateFoodTruckStation(self.nameTextbox.text(), self.stationCombobox.currentText())
+            if self.truckName != self.nameTextbox.text() :
+                # does not need to happen
+            updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
             for staff in staffList:
-                updateFoodTruckStaff(self.nameTextbox.text(), staff)
+                updateFoodTruckStaff(self.truckName, staff)
             for item in self.user.menuItems:
-                addMenuItem(self.nameTextbox.text(), item[1], item[0])
+                addMenuItem(self.truckName, item[1], item[0])
             
             self.back()
