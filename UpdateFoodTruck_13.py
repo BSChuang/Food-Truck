@@ -23,13 +23,15 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
 
         availableStaff = viewFoodTruckAvailableStaff(self.user.username, name)
-        currentStaff = viewFoodTruckStaff(name)
-        staffIndices = []
-        for i in range(len(availableStaff)):
-            if availableStaff[i] in currentStaff:
-                staffIndices.append(i)
+        
+        if staffList == None:
+            currentStaff = viewFoodTruckStaff(name)
+            staffList = []
+            for i in range(len(availableStaff)):
+                if availableStaff[i] in currentStaff:
+                    staffList.append(i)
 
-        self.staff = buildList(availableStaff, staffIndices)
+        self.staff = buildList(availableStaff, staffList)
         # TODO autofill menu when opened
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
         menuList = viewFoodTruckMenu(name)+ self.user.menuItems
@@ -91,7 +93,10 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         currentStaff = viewFoodTruckStaff(self.truckName)
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
-            updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
+            if not updateFoodTruckStation(self.truckName, self.stationCombobox.currentText()):
+                QtWidgets.QMessageBox.about(self, "Create Error", "Station at full capacity.")
+                return
+
             for staff in staffList:
                 assignStaff(self.truckName, staff)
             for staff in currentStaff:

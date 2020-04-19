@@ -94,7 +94,10 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         staffList = self.staff.selectedItems()
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
-            createFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), self.user.username)
+            if not createFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), self.user.username):
+                QtWidgets.QMessageBox.about(self, "Create Error", "Station at full capacity.")
+                return
+
             for staff in staffList:
                 assignStaff(self.nameTextbox.text(), staff.text())
             for item in self.user.menuItems:
