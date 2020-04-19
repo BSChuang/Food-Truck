@@ -425,9 +425,6 @@ def submitOrder(username, truck, purchases, date):
 
     return True
 
-
-
-
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
@@ -443,3 +440,19 @@ def getOrderHistory(username):
 
     return result
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
+
+# foodtruck something, query 20a
+def viewFoodTruckAvailableStaff(username):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_available_staff(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data = cursor.fetchall()
+
+
+# foodtruck something, query 20b
+def viewFoodTruckStaff(username):
+
+
+# foodtruck something, query 21
+def viewFoodTruckMenu(username):
