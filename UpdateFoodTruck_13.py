@@ -5,22 +5,30 @@ from CheckableComboBox import CheckableComboBox
 
 class UpdateFoodTruckWindow(QtWidgets.QWidget):
     toManageFoodTruck = QtCore.pyqtSignal()
-    toUpdateFoodTruck = QtCore.pyqtSignal()
+    toUpdateFoodTruck = QtCore.pyqtSignal(str, str, list)
     
-    def __init__(self, user):
+    def __init__(self, user, name, station, staffList):
         self.user = user
         
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
-        self.nameTextbox = buildTextbox()
+        self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
-
-        self.stationCombobox = buildComboBox(getStationNames())
+        
+        stations = getStationNames()
+        if station != '' : 
+            stations[0] = station
+        else :
+            stations[0] = 'PLACEHOLER' # TODO get current station
+        self.stationCombobox = buildComboBox(stations)
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
 
         self.staff = CheckableComboBox()
-        self.staff.addItems(getStaff("Manager 1"))
+        if staffList == None :
+            self.staff.addItems(getStaff(self.user.username))
+        else :
+            self.staff.addItems(staffList)
 
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
 
@@ -56,8 +64,11 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
             return
         try:
             price = float(self.priceTextbox.text())
+            staffString = self.staff.currentText()
+            staffList = staffString.split(',')
+            staffList.remove('')
             self.user.menuItems.append((self.foodCombobox.currentText(), price))
-            self.toUpdateFoodTruck.emit()
+            self.toUpdateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
         except ValueError:
             return
     
