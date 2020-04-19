@@ -208,6 +208,18 @@ def insertFood(foodName):
     print(foodName)
     pass
 
+# TODO
+# CreateFoodTruck_12
+# Inserts new food truck into database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
+def insertFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
+    pass
+
+# TODO
+# UpdateFoodTruck_13
+# updates food truck in database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
+def updateFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
+    pass
+
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
 # sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
@@ -231,6 +243,9 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
         data = cursor.fetchall()
         result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
+
+def getFoodTruckSummary(truckName):
+    return [("2020-01-10", "Customer One", 13.5, 2, ["Apple", "Coffee"])]
     
 
 # ManageFoodTruck_11
@@ -238,7 +253,7 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
 # staffMin and staffmax better fecking be numbers
 # and has capacity better be a booleeen
 def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
-    
+    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
     with con as cursor :
         query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
         cursor.execute(query, (username, truckName, stationName, staffMin, staffMax, hasCapacity))

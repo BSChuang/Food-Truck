@@ -15,6 +15,9 @@ from ManageFood_09 import ManageFoodWindow
 from CreateFood_10 import CreateFoodWindow
 from ManageFoodTruck_11 import ManageFoodTruckWindow
 from CreateFoodTruck_12 import CreateFoodTruckWindow
+from UpdateFoodTruck_13 import UpdateFoodTruckWindow
+from FoodTruckSummary_14 import FoodTruckSummaryWindow
+from SummaryDetail_15 import SummaryDetailWindow
 from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter
 
 
@@ -81,6 +84,10 @@ class Controller:
             self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
+        def toFoodTruckSummary():
+            self.homeWindow.close()
+            self.showFoodTruckSummary()
+
         self.homeWindow = HomeWindow(self.user.username)
         self.homeWindow.toExplore.connect(toExplore)
         self.homeWindow.toOrderHistory.connect(toOrderHistory)
@@ -88,6 +95,7 @@ class Controller:
         self.homeWindow.toManageBuildingStation.connect(toManageBuildingStation)
         self.homeWindow.toManageFood.connect(toManageFood)
         self.homeWindow.toManageFoodTruck.connect(toManageFoodTruck)
+        self.homeWindow.toFoodTruckSummary.connect(toFoodTruckSummary)
         self.homeWindow.show()
 
     def showManageBuildingStation(self):
@@ -214,15 +222,72 @@ class Controller:
             self.manageFoodTruckWindow.close()
             self.showCreateFoodTruck()
 
+        def toUpdateFoodTruck():
+            self.manageFoodTruckWindow.close()
+            self.showUpdateFoodTruck()
+
         self.manageFoodTruckWindow = ManageFoodTruckWindow(self.user)
         self.manageFoodTruckWindow.toHome.connect(toHome)
         self.manageFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
         self.manageFoodTruckWindow.toCreateFoodTruck.connect(toCreateFoodTruck)
+        self.manageFoodTruckWindow.toUpdateFoodTruck.connect(toUpdateFoodTruck)
         self.manageFoodTruckWindow.show()
 
     def showCreateFoodTruck(self):
-        self.createFoodTruckWindow = CreateFoodTruckWindow()
+        def toManageFoodTruck():
+            self.createFoodTruckWindow.close()
+            self.showManageFoodTruck()
+
+        def toCreateFoodTruck():
+            self.createFoodTruckWindow.close()
+            self.showCreateFoodTruck()
+
+        self.createFoodTruckWindow = CreateFoodTruckWindow(self.user)
+        self.createFoodTruckWindow.toCreateFoodTruck.connect(toCreateFoodTruck)
+        self.createFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
         self.createFoodTruckWindow.show()
+
+    def showUpdateFoodTruck(self):
+        def toManageFoodTruck():
+            self.updateFoodTruckWindow.close()
+            self.showManageFoodTruck()
+        
+        def toUpdateFoodTruck():
+            self.updateFoodTruckWindow.close()
+            self.showUpdateFoodTruck()
+
+        self.updateFoodTruckWindow = UpdateFoodTruckWindow(self.user)
+        self.updateFoodTruckWindow.toUpdateFoodTruck.connect(toUpdateFoodTruck)
+        self.updateFoodTruckWindow.toManageFoodTruck.connect(toManageFoodTruck)
+        self.updateFoodTruckWindow.show()
+
+    def showFoodTruckSummary(self):
+        def toHome():
+            self.foodTruckSummaryWindow.close()
+            self.showHome()
+
+        def toFoodTruckSummary():
+            self.foodTruckSummaryWindow.close()
+            self.showFoodTruckSummary()
+
+        def toSummaryDetail():
+            self.foodTruckSummaryWindow.close()
+            self.showSummaryDetail()
+
+        self.foodTruckSummaryWindow = FoodTruckSummaryWindow(self.user)
+        self.foodTruckSummaryWindow.toHome.connect(toHome)
+        self.foodTruckSummaryWindow.toFoodTruckSummary.connect(toFoodTruckSummary)
+        self.foodTruckSummaryWindow.toSummaryDetail.connect(toSummaryDetail)
+        self.foodTruckSummaryWindow.show()
+
+    def showSummaryDetail(self):
+        def toFoodTruckSummary():
+            self.summaryDetailWindow.close()
+            self.showFoodTruckSummary()
+
+        self.summaryDetailWindow = SummaryDetailWindow(self.user)
+        self.summaryDetailWindow.toFoodTruckSummary.connect(toFoodTruckSummary)
+        self.show()
 
     def showExplore(self):
         def toHome():
@@ -265,6 +330,8 @@ class User:
         self.username = None
         self.filtered = []
         self.tags = []
+        self.menuItems = []
+        self.selectedTruck = None
 
 
 def main():

@@ -9,6 +9,7 @@ class HomeWindow(QtWidgets.QWidget):
     toManageBuildingStation = QtCore.pyqtSignal()
     toManageFood = QtCore.pyqtSignal()
     toManageFoodTruck = QtCore.pyqtSignal()
+    toFoodTruckSummary = QtCore.pyqtSignal()
 
     def __init__(self, username):
         QtWidgets.QWidget.__init__(self)
@@ -43,7 +44,7 @@ class HomeWindow(QtWidgets.QWidget):
     def manageFoodTruck(self):
         self.toManageFoodTruck.emit()
     def foodTruckSummary(self):
-        pass
+        self.toFoodTruckSummary.emit()
     def manageBuildingStation(self):
         self.toManageBuildingStation.emit()
     def manageFood(self):

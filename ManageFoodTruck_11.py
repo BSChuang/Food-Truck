@@ -6,6 +6,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toManageFoodTruck = QtCore.pyqtSignal()
     toCreateFoodTruck = QtCore.pyqtSignal()
+    toUpdateFoodTruck = QtCore.pyqtSignal()
 
     def __init__(self, user):
         self.user = user
@@ -28,7 +29,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
 
         filterButton = buildButton("Filter", self.filter)
 
-        grid = buildGrid(["Food Truck Name", "Station Name", "Remaining Capacity", "Staff(s)", "# Menu Item"], self.formatForGrid(self.user.filtered))
+        grid = buildGrid(["Food Truck Name", "Station Name", "Remaining Capacity", "Staff(s)", "# Menu Items"], self.formatForGrid(self.user.filtered))
 
         layout5 = buildLayout('H', [layout4, self.capacityCheckbox, filterButton])
 
@@ -70,6 +71,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
             self.selectedTruck = radio.value
 
     def back(self):
+        self.user.selectedTruck = None
         self.user.filtered = []
         self.toHome.emit()
 
@@ -77,7 +79,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.toCreateFoodTruck.emit()
 
     def update(self):
-        pass
+        self.toUpdateFoodTruck.emit()
 
     def delete(self):
         pass

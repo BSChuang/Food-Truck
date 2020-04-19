@@ -3,10 +3,10 @@ from Helpers import *
 from Middle import *
 from CheckableComboBox import CheckableComboBox
 
-class CreateFoodTruckWindow(QtWidgets.QWidget):
+class UpdateFoodTruckWindow(QtWidgets.QWidget):
     toManageFoodTruck = QtCore.pyqtSignal()
-    toCreateFoodTruck = QtCore.pyqtSignal()
-
+    toUpdateFoodTruck = QtCore.pyqtSignal()
+    
     def __init__(self, user):
         self.user = user
         
@@ -24,7 +24,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
 
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
 
-        grid = buildGrid(["Food", "Price", "Remove"], self.formatForGrid(self.user.menuItems))
+        grid = buildGrid(["Food", "Price"], self.formatForGrid(self.user.menuItems))
 
         self.foodCombobox = buildComboBox(getFoods())
         self.priceTextbox = buildTextbox()
@@ -32,10 +32,10 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         newItemLayout = buildLayout('H', [buildLabel("Food"), self.foodCombobox, buildLabel("Price"), self.priceTextbox, addButton])
 
         backButton = buildButton("Back", self.back)
-        createButton = buildButton("Create", self.create)
-        buttonLayout = buildLayout('H', [backButton, createButton])
+        updateButton = buildButton("Update", self.update)
+        buttonLayout = buildLayout('H', [backButton, updateButton])
 
-        layout = buildLayout('V', [buildLabel("Create Food Truck"), nameLayout, stationLayout, staffLayout, buildLabel("\n Menu Item"), grid, newItemLayout, buttonLayout])
+        layout = buildLayout('V', [buildLabel("Update Food Truck"), nameLayout, stationLayout, staffLayout, buildLabel("\n Menu Item"), grid, newItemLayout, buttonLayout])
 
         self.setLayout(layout)
 
@@ -44,8 +44,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         for row in rows:
             foodName = buildLabel(row[0])
             price = buildLabel(str(row[1]))
-            removeButton = buildButton("-", lambda: self.removeFood(row[0]))
-            newList.append((foodName, price, removeButton))
+            newList.append((foodName, price))
         return newList
 
     def addFood(self):
@@ -58,22 +57,15 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         try:
             price = float(self.priceTextbox.text())
             self.user.menuItems.append((self.foodCombobox.currentText(), price))
-            self.toCreateFoodTruck.emit()
+            self.toUpdateFoodTruck.emit()
         except ValueError:
             return
-
-    def removeFood(self,foodName):
-        for i in range(len(self.user.menuItems)):
-            if self.user.menuItems[i][0] == foodName:
-                del self.user.menuItems[i]
-
-        self.toCreateFoodTruck.emit()
     
     def back(self):
         self.user.menuItems = []
         self.toManageFoodTruck.emit()
 
-    def create(self):
+    def update(self):
         staffString = self.staff.currentText()
         staffList = staffString.split(',')
         for staff in staffList:
@@ -81,5 +73,5 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
                 staffList.remove('')
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
-            insertFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList, self.user.menuItems)
+            updateFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList, self.user.menuItems)
             self.back()
