@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]#sys.argv[1]
+dbPassword      = 'password'#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -84,19 +84,27 @@ def manageBuildingStationFilter(building, buildingTag, stationName, capacityMin,
 # YOU CAN ONLY DELETE BUILDINGS THAT YOU JUST CREATED WITH NO MENU ITEMS
     # DO NOT TRY TO DELETE REAL BUILDINGS
 def removeBuilding(building) :
-    with con as cursor :
-        cursor.execute('call ad_delete_building(%s);', (building))
-        con.commit()
+    try:
+        with con as cursor :
+            cursor.execute('call ad_delete_building(%s);', (building))
+            con.commit()
+        return True
+    except pymysql.err.IntegrityError:
+        return False
 
 #ManageBuildingStationWindow_04
         # YOU CAN ONLY DELETE STATIONS YOU JUST CREATED
 def removeStation(bldgName) :
-    with con as cursor :
-        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
-        data = cursor.fetchall()
-        if(len(data)>=1) :
-            cursor.execute('call ad_delete_station(%s)', (data[0][0]))
-        con.commit()
+    try:
+        with con as cursor :
+            cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+            data = cursor.fetchall()
+            if(len(data)>=1) :
+                cursor.execute('call ad_delete_station(%s)', (data[0][0]))
+            con.commit()
+        return True
+    except pymysql.err.IntegrityError:
+        return False
 
 # CreateBuilding_05 line
 # Inserts building into database. Tags is an array of tags
@@ -226,15 +234,21 @@ def insertFood(foodName):
 
     return True
 
-
 # CreateFoodTruck
 def createFoodTruck(foodTruckName, stationName, username):
-    with con as cursor:
-        query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
-        cursor.execute(query, (foodTruckName, stationName, username))
-        con.commit()
-
-    return True
+    try :
+        with con as cursor:
+            cursor.execute('call remaining_capacity(%s)', (stationName))
+            remainingCapacity = cursor.fetchall()[0][0]
+            if(remainingCapacity <= 0 ) :
+                return False
+            query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
+            cursor.execute(query, (foodTruckName, stationName, username))
+            con.commit()
+            return True
+    except IndexError :
+        print("No remaining capacity found for station " + stationName + " in createFoodTruck: Middle.py")
+        return False
 
 def assignStaff(foodTruckName, staffFnameLname):
 
@@ -514,11 +528,21 @@ def viewFoodTruckMenu(foodTruckName):
         result = [(data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
 
+
 # updateFoodTruck
 def updateFoodTruckStation(foodTruckName, stationName):
-    with con as cursor:
-        cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
-        con.commit()
+    try :
+        with con as cursor:
+            cursor.execute('call remaining_capacity(%s)', (stationName))
+            remainingCapacity = cursor.fetchall()[0][0]
+            if(remainingCapacity <= 0 ) :
+                return False
+            cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
+            con.commit()
+            return True
+    except IndexError :
+        print("No remaining capacity found for station " + stationName + " in UpdateFoodTruckStation: Middle.py")
+        return False
 
 def updateFoodTruckStaff(foodTruckName, staffName):
     with con as cursor:
