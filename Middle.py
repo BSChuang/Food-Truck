@@ -182,7 +182,7 @@ def getFoods() :
         cursor.execute('select * from food;',)
         data = cursor.fetchall()
         return [i[0] for i in data]
-        
+
 
 
 # ManageFood_09
