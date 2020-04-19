@@ -60,6 +60,8 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
             return
         try:
             price = float(self.priceTextbox.text())
+            if price < 0:
+                return
             fprice = '{:.2f}'.format(price)
             staffString = self.staff.currentText()
             staffList = staffString.split(',')

@@ -34,6 +34,6 @@ class UpdateStationWindow(QtWidgets.QWidget):
         self.toManageBuildingStation.emit()
 
     def update(self):
-        if(int(self.capacityTextbox.text()) >= 0) :
+        if self.capacityTextbox.text() and int(self.capacityTextbox.text()) >= 0:
             updateStation(self.name, int(self.capacityTextbox.text()), self.sponsoredCombobox.currentText())
             self.back()

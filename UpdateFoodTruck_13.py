@@ -60,6 +60,8 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
             return
         try:
             price = float(self.priceTextbox.text())
+            if price < 0:
+                return
             fprice = '{:.2f}'.format(price)
             staffString = self.staff.currentText()
             staffList = staffString.split(',')
@@ -70,6 +72,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
     
     def back(self):
         self.user.menuItems = []
+        self.user.selectedTruck = None
         self.toManageFoodTruck.emit()
 
     def update(self):

@@ -9,6 +9,7 @@ class ExploreWindow(QtWidgets.QWidget):
     def __init__(self, user):
         self.user = user
         self.username = user.username
+        self.selectedStation = None
 
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')

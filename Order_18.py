@@ -5,10 +5,10 @@ from datetime import datetime
 
 class OrderWindow(QtWidgets.QWidget):
     toCurrentInformation = QtCore.pyqtSignal()
-    purchaseQuantities = []
 
     def __init__(self, user):
         self.user = user
+        self.purchaseQuantities = []
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
@@ -48,7 +48,7 @@ class OrderWindow(QtWidgets.QWidget):
             
         purchases = []
         for tup in self.purchaseQuantities:
-            if tup[1].text():
+            if tup[1].text() and int(tup[1].text()) >= 0:
                 purchases.append((tup[0], int(tup[1].text())))
         
         if len(purchases) == 0:
