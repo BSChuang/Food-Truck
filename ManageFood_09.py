@@ -72,6 +72,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
     def delete(self):
         if self.selectedFood is not None:
             deleteFood(self.selectedFood)
+            self.user.filtered = []
             self.toManageFood.emit()
 
     def create(self):
