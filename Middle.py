@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]#sys.argv[1]
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -35,7 +35,8 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
                 query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
                 cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
                 con.commit()
-            except pymysql.err.IntegrityError:
+            except pymysql.err.IntegrityError: #duplicate entries i.e. 2X "Jane Doe"
+                print('Duplicate Entry')
                 return False
 
     return True
