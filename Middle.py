@@ -468,5 +468,5 @@ def viewFoodTruckMenu(foodTruckName):
         query = 'CALL mn_view_foodTruck_menu(%s);'
         cursor.execute(query, (foodTruckName))
         result = cursor.fetchall()
-
+        result = [(data[i][2]) for i in range(0, len(data))]
     return result
