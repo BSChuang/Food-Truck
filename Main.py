@@ -351,6 +351,7 @@ class User:
 
 
 def main():
+    QtWidgets.QApplication.setStyle('Fusion')
     app = QtWidgets.QApplication(sys.argv)
     controller = Controller()
     controller.showLogin()
