@@ -10,6 +10,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
     def __init__(self, user, name, station, staffList):
         self.user = user
         self.truckName = name
+        self.givenStation = station
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
         self.nameTextbox = buildTextbox(False, name)
@@ -93,9 +94,10 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         currentStaff = viewFoodTruckStaff(self.truckName)
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
-            if not updateFoodTruckStation(self.truckName, self.stationCombobox.currentText()):
-                QtWidgets.QMessageBox.about(self, "Create Error", "Station at full capacity.")
-                return
+            if (self.stationCombobox.currentText() != self.givenStation) :
+                if not updateFoodTruckStation(self.truckName, self.stationCombobox.currentText()):
+                    QtWidgets.QMessageBox.about(self, "Create Error", "Station at full capacity.")
+                    return
 
             for staff in staffList:
                 assignStaff(self.truckName, staff)
