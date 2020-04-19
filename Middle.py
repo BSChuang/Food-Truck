@@ -501,8 +501,10 @@ def viewFoodTruckMenu(foodTruckName): # TODO unfuck this and implement
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
         cursor.execute(query, (foodTruckName))
+        query = ('select * from mn_view_foodTruck_menu_result')
+        cursor.execute(query, )
         data = cursor.fetchall()
-        result = [(data[i][2]) for i in range(0, len(data))]
+        result = [(data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
 
 # updateFoodTruck

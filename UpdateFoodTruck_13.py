@@ -11,7 +11,9 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-        self.user.menuItems = viewFoodTruckMenu(name) 
+        self.user.menuItems = viewFoodTruckMenu(name)
+        print('constructor')
+        print(self.user.menuItems)
         self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
         
@@ -51,20 +53,31 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         return newList
 
     def addFood(self):
+        print('addfood called')
         for i in range(len(self.user.menuItems)):
             if self.user.menuItems[i][0] == self.foodCombobox.currentText():
+                print('addfood if 1')
                 return
 
         if self.priceTextbox.text() == "":
+            print('addfood if 2')
             return
         try:
+            print('addfood try')
             price = float(self.priceTextbox.text())
+            print(price)
             staffString = self.staff.currentText()
+            print(staffString)
             staffList = staffString.split(',')
-            staffList.remove('')
+            print(staffList)
+            print(self.user.menuItems)
             self.user.menuItems.append((self.foodCombobox.currentText(), price))
+            print(self.user.menuItems)
+            print('first')
             self.toUpdateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
+            print('second')
         except ValueError:
+            print('addfood catch')
             return
     
     def back(self):
