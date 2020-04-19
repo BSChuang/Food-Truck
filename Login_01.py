@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 from Helpers import *
 from Middle import *
 
@@ -28,9 +29,15 @@ class LoginWindow(QtWidgets.QWidget):
     def login(self):
         username = self.userTextbox.text()
         password = self.passTextbox.text()
-        if authenticateUser(username, password):
+        print(username)
+        print(password)
+        if username is '' or password is '':
+            QMessageBox.about(self, "Login Error", "Must provide username and password.")
+        elif authenticateUser(username, password):
             self.user.username = username
             self.toHome.emit()
+        else:
+            QMessageBox.about(self, "Login Error", "User not found.")
 
     def register(self):
         self.toRegister.emit()
