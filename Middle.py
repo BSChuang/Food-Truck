@@ -184,6 +184,13 @@ def updateStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
         con.commit()
 
+#Screen 09
+def getFoods() :
+    with con as cursor:
+        cursor.execute('select * from food;',)
+        data = cursor.fetchall()
+        return [i[0] for i in data]
+        
 
 
 # ManageFood_09
