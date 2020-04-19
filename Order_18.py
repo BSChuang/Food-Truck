@@ -32,7 +32,7 @@ class OrderWindow(QtWidgets.QWidget):
             foodName = buildLabel(row[0])
             price = buildLabel(str(row[1]))
             quantityTextbox = buildTextbox(True)
-            self.purchaseQuantities.append((row[0], quantityTextbox))
+            self.purchaseQuantities.append((row[0], quantityTextbox, row[1]))
 
             newList.append((foodName, price, quantityTextbox))
         return newList
@@ -47,15 +47,17 @@ class OrderWindow(QtWidgets.QWidget):
             return
             
         purchases = []
-        for tup in self.purchaseQuantities:
+        for tup in self.purchaseQuantities: # tuple(foodName, quantity, price)
             if tup[1].text() and int(tup[1].text()) >= 0:
-                purchases.append((tup[0], int(tup[1].text())))
+                purchases.append((tup[0], int(tup[1].text()), tup[2]))
         
         if len(purchases) == 0:
             return
         
-        submitOrder(self.user.username, self.user.selectedTruck, purchases, date)
-        self.back()
+        if submitOrder(self.user.username, self.user.selectedTruck, purchases, date):
+            self.back()
+        else:
+            QtWidgets.QMessageBox.about(self, "Order Error", "Order total is greater than balance.")
 
     def back(self):
         self.toCurrentInformation.emit()
