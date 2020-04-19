@@ -12,7 +12,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-
+        
         self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
         
