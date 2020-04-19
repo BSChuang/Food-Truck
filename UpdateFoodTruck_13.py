@@ -86,11 +86,17 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
 
     def update(self):
         staffList = self.staff.selectedItems()
+        for i in range(len(staffList)):
+            staffList[i] = staffList[i].text()
+        currentStaff = viewFoodTruckStaff(self.truckName)
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
             updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
             for staff in staffList:
-                updateFoodTruckStaff(self.truckName, staff.text())
+                assignStaff(self.truckName, staff)
+            for staff in currentStaff:
+                if staff not in staffList:
+                    assignStaff(None, staff)
             for item in self.user.menuItems:
                 addMenuItem(self.truckName, item[1], item[0])
             
