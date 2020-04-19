@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]#sys.argv[1]
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -26,18 +26,12 @@ def authenticateUser(username, password):
 # userType must be '', 'admin', 'manager', 'staff' otherwise sql will shit its pants
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
-    with con as cursor:
-            #cant pass null to sql, as long as no email is given they won't be added to admin table
-            if userType == None or userType == '' :
-                userType = 'Admin'
-
-            try:
-                query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-                cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
-                con.commit()
-            except pymysql.err.IntegrityError:
-                return False
-
+        try:
+            query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
+            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
+            con.commit()
+        except pymysql.err.IntegrityError:
+            return False
     return True
 
 # Home_03 line 22
@@ -242,7 +236,7 @@ def createFoodTruck(foodTruckName, stationName, username):
     return True
 
 def assignStaff(foodTruckName, staffFnameLname):
-
+    
     with con as cursor:
         names = staffFnameLname.split(' ')
         q = 'select username from user where firstname = %s and lastname = %s;'
@@ -432,6 +426,7 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
+    print(truckName)
     menu = ()
     with con as cursor:
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
@@ -499,7 +494,7 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName):
+def viewFoodTruckMenu(foodTruckName): 
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
