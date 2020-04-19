@@ -29,14 +29,15 @@ class LoginWindow(QtWidgets.QWidget):
     def login(self):
         username = self.userTextbox.text()
         password = self.passTextbox.text()
-        if authenticateUser(username, password):
+        print(username)
+        print(password)
+        if username is '' or password is '':
+            QMessageBox.about(self, "Login Error", "Must provide username and password.")
+        elif authenticateUser(username, password):
             self.user.username = username
             self.toHome.emit()
-            print('yes')
         else:
-            QMessageBox.about(self, "Login Error", "User not found")
-            print('no')
-            # buildLabel("User not found")
+            QMessageBox.about(self, "Login Error", "User not found.")
 
     def register(self):
         self.toRegister.emit()
