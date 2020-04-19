@@ -1,10 +1,11 @@
+import sys
 import pymysql
 import datetime
 
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "elitecheer"
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -35,7 +36,7 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
-    return True 
+    return True
 
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
@@ -57,12 +58,12 @@ def getUserType(username):
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
             result.append('staff')
-        
+
         query = "SELECT COUNT(username) FROM customer WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
             result.append('customer')
-        
+
     return result
 
 # ManageBuildingStationWindow_04 line 89
@@ -90,7 +91,7 @@ def removeBuilding(building) :
     with con as cursor :
         cursor.execute('call ad_delete_building(%s);', (building))
         con.commit()
-        
+
 #ManageBuildingStationWindow_04
         # YOU CAN ONLY DELETE STATIONS YOU JUST CREATED
 def removeStation(bldgName) :
@@ -101,7 +102,7 @@ def removeStation(bldgName) :
             cursor.execute('call ad_delete_station(%s)', (data[0][0]))
         con.commit()
 
-# CreateBuilding_05 line 
+# CreateBuilding_05 line
 # Inserts building into database. Tags is an array of tags
 def insertBuilding(building, description, tags):
     with con as cursor :
@@ -109,27 +110,27 @@ def insertBuilding(building, description, tags):
         for tag in tags :
             cursor.execute('call ad_add_building_tag(%s, %s)', (building, tag))
         con.commit()
-        
+
 #CreateBuilding_05, UpdateBuilding_06
 def addTag(building, tag) :
     with con as cursor :
         cursor.execute('call ad_add_building_tag(%s, %s);', (building, tag))
         con.commit()
-        
+
 #CreateBuilding_05, UpdateBuilding_06
-def removeTag(building, tag) : 
+def removeTag(building, tag) :
     with con as cursor :
         cursor.execute('call ad_remove_building_tag(%s, %s);', (building, tag))
         con.commit()
-        
-#UpdateBuilding_06, CreateBuilding_05        
+
+#UpdateBuilding_06, CreateBuilding_05
 def getTags(building) :
     with con as cursor :
         cursor.execute('call ad_view_building_tags(%s);', (building))
         cursor.execute('select * from ad_view_building_tags_result')
         data = cursor.fetchall()
         return [data[i][0] for i in range(0, len(data))]
-    
+
 #UpdateBuilding_06, gets the deets
 def viewBuilding(building) :
     with con as cursor :
@@ -137,8 +138,8 @@ def viewBuilding(building) :
         cursor.execute('select * from ad_view_building_general_result')
         data = cursor.fetchall()
         return [data[0][0], data[0][1]]
-      
-    
+
+
 # UpdateBuilding_06
 #should be able to change the name
 def updateBuilding(ogbuilding, building, description):
@@ -152,7 +153,7 @@ def insertStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_get_available_building()',)
         cursor.execute('call ad_create_station(%s, %s, %s)', (station, sponsoredBuilding, capacity))
         con.commit()
- 
+
 # CreateStation_07
 def getAvailableBuilding() :
     with con as cursor :
@@ -172,7 +173,7 @@ def viewStation(bldgName) :
             data = cursor.fetchall()
             return [data[0][0], data[0][1], data[0][2]]
         return None
-    
+
 # UpdateStation_08
 def updateStation(station, capacity, sponsoredBuilding):
     with con as cursor:
@@ -217,13 +218,13 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
 
     #useful info for later
     # we can create dates to pass to mysql using datetime.date(year, month, day) out of integers
-    #until this is implemented ill just pass None jajaja   
+    #until this is implemented ill just pass None jajaja
     if (not isinstance(dateMin, datetime.date)) :
         dateMin = None
-        
+
     if (not isinstance(dateMax, datetime.date)) :
         dateMax = None
-        
+
     with con as cursor :
         query = 'call mn_filter_summary(%s, %s, %s, %s, %s, %s, %s);'
         cursor.execute(query, (username, foodTruckName, stationName, dateMin, dateMax, sortedBy, sortedDirection))
@@ -231,14 +232,14 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
         data = cursor.fetchall()
         result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
-    
+
 
 # ManageFoodTruck_11
 # Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
 # staffMin and staffmax better fecking be numbers
 # and has capacity better be a booleeen
 def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
-    
+
     with con as cursor :
         query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
         cursor.execute(query, (username, truckName, stationName, staffMin, staffMax, hasCapacity))
@@ -283,7 +284,7 @@ def getStationNames():
 
     return result
 
-# TODO 
+# TODO
 # Explore_16 line 66
 # Sets the user's station location
 def setUserStation(username, station):
@@ -308,7 +309,7 @@ def exploreFilter(buildingName, stationName, buildingTag, truckName, food):
         data = [['' if j is None else j for j in i] for i in data]
         # reformat
         result = [(data[i][0], data[i][1], data[i][2].split(','), data[i][3].split(',')) for i in range(0, len(data))]
-        
+
         return result
 
 # CurrentInformation_17 line 13
@@ -323,7 +324,7 @@ def getCurrentInformation(username):
         data = [['' if j is None else j for j in i] for i in data]
         # reformat
         result = [data[0][0], data[0][1], data[0][2].split(','), data[0][3], data[0][4]]
-        
+
     return result
     # ("Station One", "Building One", ["ADA", "Chemistry"], "Description here", 100)
 
@@ -339,7 +340,7 @@ def getTrucksAtStation(username):
         data = [['' if j is None else j for j in i] for i in data]
         # reformat
         result = [(data[i][0], data[i][1], data[i][2].split(',')) for i in range(0, len(data))]
-        
+
     return result
     #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
