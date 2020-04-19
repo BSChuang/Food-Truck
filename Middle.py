@@ -17,9 +17,8 @@ def authenticateUser(username, password):
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != () or cursor.fetchall() is not None:
+        if cursor.fetchall() != ():
             return True
-
     return False
 
 # Register_02 line ??
