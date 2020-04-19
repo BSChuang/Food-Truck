@@ -5,11 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-<<<<<<< HEAD
-dbPassword      = "gojackets"
-=======
 dbPassword      = "password"
->>>>>>> fa23b851f261f34b5c51b4a20395461314de550b
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
