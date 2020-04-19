@@ -57,7 +57,10 @@ class RegisterWindow(QtWidgets.QWidget):
     def register(self): # TODO: Add new user to database ------------------------------------------------------------------------------------------------------------
         if self.employeeType == "":
             self.employeeType == None
-        if self.passTextbox.text() == self.confirmTextbox.text() and insertUser(self.userTextbox.text(), self.passTextbox.text(), self.emailTextbox.text(), self.firstTextbox.text(), self.lastTextbox.text(), self.balanceTextbox.text(), self.employeeType):
+        if len(self.passTextbox.text()) < 8:
+            QtWidgets.QMessageBox.about(self, "Register Error", "Password must be 8 or more characters.")
+            return
+        if self.userTextbox.text() and self.passTextbox.text() and self.emailTextbox.text() and self.firstTextbox.text() and self.lastTextbox.text() and self.balanceTextbox.text() and self.passTextbox.text() == self.confirmTextbox.text() and insertUser(self.userTextbox.text(), self.passTextbox.text(), self.emailTextbox.text(), self.firstTextbox.text(), self.lastTextbox.text(), self.balanceTextbox.text(), self.employeeType):
             try:
                 float(self.balanceTextbox.text())
                 self.user.username = self.userTextbox.text()
