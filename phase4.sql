@@ -174,6 +174,22 @@ UNION
 SELECT username, 'Customer' AS userType FROM Customer
 WHERE username NOT IN (SELECT username FROM Employee);
 
+-- Remaining Capacity
+DROP PROCEDURE IF EXISTS remaining_capacity;
+DELIMITER //
+CREATE PROCEDURE remaining_capacity(
+				IN i_stationName VARCHAR(50))
+BEGIN
+DROP TABLE IF EXISTS mn_filter_foodTruck_result;
+CREATE TABLE capacity(stationName varchar(100), remainingCapacity int)
+	SELECT station.stationName, (station.capacity - occupied) as remainingCapacity
+    FROM station
+    INNER JOIN (SELECT stationName, COUNT(foodTruckName) as occupied FROM foodtruck group by stationName) a
+    on a.stationName = station.stationName
+    WHERE station.stationName = i_stationName;    
+END //
+DELIMITER ;
+
 -- Query #1: login [Screen #1 Login]
 DROP PROCEDURE IF EXISTS login;
 DELIMITER //
