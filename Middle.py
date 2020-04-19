@@ -17,9 +17,8 @@ def authenticateUser(username, password):
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != () or cursor.fetchall() is not None:
+        if cursor.fetchall() != ():
             return True
-
     return False
 
 # Register_02 line ??
@@ -177,6 +176,13 @@ def updateStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
         con.commit()
 
+#Screen 09
+def getFoods() :
+    with con as cursor:
+        cursor.execute('select * from food;',)
+        data = cursor.fetchall()
+        return [i[0] for i in data]
+        
 
 
 # ManageFood_09
@@ -354,6 +360,7 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
+    print(truckName)
     menu = ()
     with con as cursor:
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
