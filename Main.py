@@ -19,7 +19,7 @@ from Explore_16 import ExploreWindow
 from CurrentInformation_17 import CurrentInformation
 from Order_18 import OrderWindow
 from OrderHistory_19 import OrderHistory
-from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter
+from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter
 
 
 class Controller:
@@ -87,6 +87,7 @@ class Controller:
 
         def toFoodTruckSummary():
             self.homeWindow.close()
+            self.user.filtered = foodTruckSummaryFilter(self.user.username, None, None, None, None, None, None)
             self.showFoodTruckSummary()
 
         self.homeWindow = HomeWindow(self.user.username)
