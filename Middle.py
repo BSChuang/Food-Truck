@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]#sys.argv[1]
+dbPassword      = "password"#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -496,13 +496,17 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName): # TODO unfuck this and implement
+def viewFoodTruckMenu(foodTruckName): 
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
         cursor.execute(query, (foodTruckName))
+<<<<<<< HEAD
         query = ('select * from mn_view_foodTruck_menu_result')
         cursor.execute(query, )
+=======
+        cursor.execute('select * from mn_view_foodtruck_menu_result')
+>>>>>>> 9b0369e34347fe279753be7f4882ec4a67693df0
         data = cursor.fetchall()
         result = [(data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
