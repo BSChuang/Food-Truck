@@ -84,19 +84,27 @@ def manageBuildingStationFilter(building, buildingTag, stationName, capacityMin,
 # YOU CAN ONLY DELETE BUILDINGS THAT YOU JUST CREATED WITH NO MENU ITEMS
     # DO NOT TRY TO DELETE REAL BUILDINGS
 def removeBuilding(building) :
-    with con as cursor :
-        cursor.execute('call ad_delete_building(%s);', (building))
-        con.commit()
+    try:
+        with con as cursor :
+            cursor.execute('call ad_delete_building(%s);', (building))
+            con.commit()
+        return True
+    except pymysql.err.IntegrityError:
+        return False
 
 #ManageBuildingStationWindow_04
         # YOU CAN ONLY DELETE STATIONS YOU JUST CREATED
 def removeStation(bldgName) :
-    with con as cursor :
-        cursor.execute('select stationname from station where buildingName = %s', (bldgName))
-        data = cursor.fetchall()
-        if(len(data)>=1) :
-            cursor.execute('call ad_delete_station(%s)', (data[0][0]))
-        con.commit()
+    try:
+        with con as cursor :
+            cursor.execute('select stationname from station where buildingName = %s', (bldgName))
+            data = cursor.fetchall()
+            if(len(data)>=1) :
+                cursor.execute('call ad_delete_station(%s)', (data[0][0]))
+            con.commit()
+        return True
+    except pymysql.err.IntegrityError:
+        return False
 
 # CreateBuilding_05 line
 # Inserts building into database. Tags is an array of tags

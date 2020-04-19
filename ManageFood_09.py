@@ -14,7 +14,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
-        self.foodNameCombobox = buildComboBox(getFoods())
+        self.foodNameCombobox = buildComboBox([""] + getFoods())
         filterButton = buildButton("Filter", self.filter)
         hLayout1 = buildLayout('H', [buildLabel("Name"), self.foodNameCombobox, filterButton])
 
