@@ -192,6 +192,7 @@ class Controller:
 
         def toManageFood():
             self.manageFoodWindow.close()
+            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         def toCreateFood():

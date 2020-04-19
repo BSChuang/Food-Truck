@@ -484,7 +484,8 @@ def viewFoodTruckStaff(foodTruckName):
     with con as cursor:
         query = ('call mn_view_foodTruck_staff(%s);')
         cursor.execute(query, (foodTruckName))
-        con.commit()
+        query = ('select * from mn_view_foodTruck_staff_result')
+        cursor.execute(query, )
         data = cursor.fetchall()
         result = [(data[i][1]) for i in range(0, len(data))]
     return result
