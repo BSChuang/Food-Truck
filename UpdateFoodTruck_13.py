@@ -24,7 +24,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
 
         self.staff = CheckableComboBox()
         self.staff.addItems(viewFoodTruckAvailableStaff(self.user.username, name))
-
+        # TODO autofill menu when opened
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
 
         grid = buildGrid(["Food", "Price"], self.formatForGrid(self.user.menuItems))

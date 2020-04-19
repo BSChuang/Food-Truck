@@ -464,7 +464,7 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName):
+def viewFoodTruckMenu(foodTruckName): # TODO unfuck this and implement
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
