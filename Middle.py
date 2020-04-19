@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "1060789Bmy!"
+dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -188,7 +188,7 @@ def updateStation(station, capacity, sponsoredBuilding):
 def manageFoodFilter(foodName, sortedBy, sortedDirection):
     if sortedBy == None :
         sortedBy = 'name'
-        
+
     with con as cursor :
         query = 'call ad_filter_food(%s, %s, %s);'
         cursor.execute(query, (foodName, sortedBy, sortedDirection))
@@ -355,14 +355,20 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
-    return [("Apple", 3), ("Banana", 5)]
+    menu = ()
+    with con as cursor:
+        query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
+        cursor.execute(query, (truckName))
+        menu = cursor.fetchall()
+        
+    return menu
 
 # Order_18
 # Purchases is list of tuple(foodName, quantity) and date is date
 def submitOrder(purchases, date):
     pass
 
-# TODO
+
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
