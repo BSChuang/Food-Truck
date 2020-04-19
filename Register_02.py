@@ -30,7 +30,7 @@ class RegisterWindow(QtWidgets.QWidget):
 
         self.balanceTextbox = buildTextbox()
         balanceLayout = buildLayout("H", [buildLabel("Balance"), self.balanceTextbox])
-        
+
         self.employeeType = "Admin"
         adminRadio = buildRadioButton("Admin", self.employee, True)
         managerRadio = buildRadioButton("Manager", self.employee)
@@ -54,4 +54,8 @@ class RegisterWindow(QtWidgets.QWidget):
 
     def register(self): # TODO: Add new user to database ------------------------------------------------------------------------------------------------------------
         if self.passTextbox.text() == self.confirmTextbox.text() and insertUser(self.userTextbox.text(), self.passTextbox.text(), self.emailTextbox.text(), self.firstTextbox.text(), self.lastTextbox.text(), self.balanceTextbox.text(), self.employeeType):
-            self.toHome.emit()
+            try:
+                float(self.balanceTextbox.text())
+                self.toHome.emit()
+            except ValueError:
+                print("Balance is formatted incorrectly")

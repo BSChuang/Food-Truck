@@ -71,11 +71,12 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
         self.toCreateBuilding.emit()
     def updateBuilding(self):
         #only go to update building if theres one selected
-        if not(self.selectedBuilding == None) : 
+        if self.selectedBuilding != None:
             self.toUpdateBuilding.emit(self.selectedBuilding)
     def deleteBuilding(self):
-        removeBuilding(self.selectedBuilding)
-        self.filter()
+        if self.selectedBuilding != None:
+            removeBuilding(self.selectedBuilding)
+            self.filter()
     def createStation(self):
         self.toCreateStation.emit()
     def updateStation(self):
@@ -83,9 +84,10 @@ class ManageBuildingStationWindow(QtWidgets.QWidget):
             station = viewStation(self.selectedBuilding)
             self.toUpdateStation.emit(station[0], station[1], station[2])
     def deleteStation(self):
-        removeStation(self.selectedBuilding)
-        self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
-        self.toManageBuildingStation.emit()
+        if self.selectedBuilding != None:
+            removeStation(self.selectedBuilding)
+            self.user.filtered = manageBuildingStationFilter(None, None, None, None, None)
+            self.toManageBuildingStation.emit()
 
     def selectBuilding(self):
         radio = self.sender()
