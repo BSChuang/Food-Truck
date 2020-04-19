@@ -432,7 +432,6 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
-    print(truckName)
     menu = ()
     with con as cursor:
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'

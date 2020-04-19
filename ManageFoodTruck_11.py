@@ -80,7 +80,6 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.toCreateFoodTruck.emit()
 
     def update(self):
-        print(self.user.selectedTruck)
         if self.user.selectedTruck != None:
             for i in self.user.filtered :
                 if i[0] == self.user.selectedTruck :
