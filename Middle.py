@@ -239,7 +239,7 @@ def createFoodTruck(foodTruckName, stationName, username):
 
 def addStaff(foodTruckName, staffName):
     with con as cursor:
-        query = 'CALL mn_create_foodTruck_add_station(%s, %s)'
+        query = 'CALL mn_create_foodTruck_add_staff(%s, %s)'
         cursor.execute(query, (foodTruckName, staffName))
         con.commit()
 
@@ -247,7 +247,7 @@ def addStaff(foodTruckName, staffName):
 
 def addMenuItem(foodTruckName, price, foodName):
     with con as cursor:
-        query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
+        query = 'CALL mn_create_foodTruck_add_menu_item(%s, %s, %s)'
         cursor.execute(query, (foodTruckName, price, foodName))
         con.commit()
 
