@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "1060789Bmy!"
+dbPassword      = "password"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -17,7 +17,7 @@ def authenticateUser(username, password):
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != ():
+        if cursor.fetchall() != () or cursor.fetchall() is not None:
             return True
 
     return False
