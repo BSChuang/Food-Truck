@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "password"
+dbPassword      = "1060789Bmy!"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -14,8 +14,6 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True
-
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
