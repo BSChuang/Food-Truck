@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -27,19 +27,11 @@ def authenticateUser(username, password):
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
-            if balance == '' :
-                bal = None
-            else :
-                try :
-                    bal = float(balance)
-                except ValueError :
-                    bal = None
-                    
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(query, (username, email, firstname, lastname, password, bal, userType))
+            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
 
     return True
@@ -367,13 +359,29 @@ def getTruckMenu(truckName):
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
         cursor.execute(query, (truckName))
         menu = cursor.fetchall()
-        
+
     return menu
 
 # Order_18
 # Purchases is list of tuple(foodName, quantity) and date is date
-def submitOrder(purchases, date):
-    pass
+#cus_order
+#cus_add_item
+def submitOrder(username, truck, purchases, date):
+    with con as cursor:
+        query = 'CALL cus_order(%s, %s);'
+        cursor.execute(query, (date, username))
+        con.commit()
+        query = 'SELECT MAX(orderID) from orders;'
+        cursor.execute(query)
+        ID = cursor.fetchall()[0]
+        print(ID)
+        query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
+        cursor.execute(query, (truck, purchases[0], purchases[1], ID))
+        con.commit()
+
+    return True
+
+
 
 
 # OrderHistory_19 line ??
