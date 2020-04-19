@@ -9,10 +9,9 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
     
     def __init__(self, user, name, station, staffList):
         self.user = user
+        self.truckName = name
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
-        if self.user.menuItems == []:
-            self.user.menuItems = viewFoodTruckMenu(name)
         self.nameTextbox = buildTextbox(False, name)
         nameLayout = buildLayout('H', [buildLabel("Name"), self.nameTextbox])
         
@@ -27,8 +26,8 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         self.staff.addItems(viewFoodTruckAvailableStaff(self.user.username, name))
         # TODO autofill menu when opened
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
-
-        grid = buildGrid(["Food", "Price"], self.formatForGrid(self.user.menuItems))
+        menuList = viewFoodTruckMenu(name)+ self.user.menuItems
+        grid = buildGrid(["Food", "Price"], self.formatForGrid(menuList))
 
         self.foodCombobox = buildComboBox(getFoods())
         self.priceTextbox = buildTextbox()
@@ -52,8 +51,8 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         return newList
 
     def addFood(self):
-        for i in range(len(self.user.menuItems)):
-            if self.user.menuItems[i][0] == self.foodCombobox.currentText():
+        for i in (self.user.menuItems + viewFoodTruckMenu(self.truckName)):
+            if i[0] == self.foodCombobox.currentText():
                 return
 
         if self.priceTextbox.text() == "":
@@ -76,17 +75,23 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         self.toManageFoodTruck.emit()
 
     def update(self):
+        print(self.nameTextbox.text())
+        print(self.stationCombobox.currentText())
+        print(self.user.menuItems)
         staffString = self.staff.currentText()
-        staffList = staffString.split(',')
+        staffList = staffString.split(', ')
         for staff in staffList:
             if staff == '':
                 staffList.remove('')
+        print(staffList)
 
-        if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
-            updateFoodTruckStation(self.nameTextbox.text(), self.stationCombobox.currentText())
+        if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
+            # if self.truckName != self.nameTextbox.text() :
+                # does not need to happen
+            updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
             for staff in staffList:
-                updateFoodTruckStaff(self.nameTextbox.text(), staff)
+                updateFoodTruckStaff(self.truckName, staff)
             for item in self.user.menuItems:
-                updateFoodTruckMenuItem(self.nameTextbox.text(), item[1], item[0])
+                addMenuItem(self.truckName, item[1], item[0])
             
             self.back()

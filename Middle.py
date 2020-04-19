@@ -511,9 +511,13 @@ def updateFoodTruckStation(foodTruckName, stationName):
         cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
         con.commit()
 
-def updateFoodTruckStaff(foodTruckName, staffName):
+def updateFoodTruckStaff(foodTruckName, staffFnameLname):
     with con as cursor:
-        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, staffName))
+        names = staffFnameLname.split(' ')
+        q = 'select username from user where firstname = %s and lastname = %s;'
+        cursor.execute(q, (names[0], names[1]))
+        username = cursor.fetchall()[0][0]
+        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, username))
         con.commit()
 
 def updateFoodTruckMenuItem(foodTruckName, price, foodName):
