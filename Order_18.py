@@ -7,6 +7,7 @@ class OrderWindow(QtWidgets.QWidget):
     purchaseQuantities = []
 
     def __init__(self, user):
+        self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
@@ -43,7 +44,7 @@ class OrderWindow(QtWidgets.QWidget):
                 purchases.append((tup[0], tup[1]))
         
         if len(purchases) != 0:       
-            submitOrder(purchases, date)
+            submitOrder(user.username, user.selectedTruck, purchases, date)
             self.back()
 
     def back(self):
