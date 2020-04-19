@@ -11,7 +11,7 @@ class OrderWindow(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
-        menu = getTruckMenu()
+        menu = getTruckMenu(user.selectedTruck)
         grid = buildGrid(["Food", "Price", "Purchase Quantity"], self.formatForGrid(menu))
 
         self.date = buildTextbox()
@@ -19,9 +19,9 @@ class OrderWindow(QtWidgets.QWidget):
 
         backButton = buildButton("Back", self.back)
         submitButton = buildButton("Submit", self.submit)
-        buttonLayout = buildLayout('H', backButton)
+        buttonLayout = buildLayout('H', [backButton, submitButton])
 
-        layout = buildLayout('V', [buildLabel("Food Truck: " + user.selectedTruck), grid, dateLayout, buttonLayout])
+        layout = buildLayout('V', [buildLabel("Food Truck: " + user.selectedTruck), grid, buildLabel(""), dateLayout, buttonLayout])
 
         self.setLayout(layout)
 
@@ -33,7 +33,7 @@ class OrderWindow(QtWidgets.QWidget):
             quantityTextbox = buildTextbox(True)
             self.purchaseQuantities.append((foodName, quantityTextbox))
 
-            newList.append((truckName, totalOrder, totalRevenue, numCustomer))
+            newList.append((foodName, price, quantityTextbox))
         return newList
 
     def submit(self):

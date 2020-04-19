@@ -5,12 +5,14 @@ from Middle import *
 class CurrentInformation(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toOrder = QtCore.pyqtSignal()
+    selectedTruck = None
 
-    def __init__(self, username):
+    def __init__(self, user):
+        self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle("Current Information")
 
-        station, building, tags, description, balance = getCurrentInformation(username)
+        station, building, tags, description, balance = getCurrentInformation(user.username)
 
         hLayout1 = buildLayout('H', [buildLabel("Station: "), buildLabel(station)])
         hLayout2 = buildLayout('H', [buildLabel("Building: "), buildLabel(building)])
@@ -18,7 +20,7 @@ class CurrentInformation(QtWidgets.QWidget):
         hLayout4 = buildLayout('H', [buildLabel("Building Description: "), buildLabel(description)])
         hLayout5 = buildLayout('H', [buildLabel("Balance: "), buildLabel(str(balance))])
 
-        trucks = getTrucksAtStation(username)
+        trucks = getTrucksAtStation(user.username)
         trucks = self.formatForGrid(trucks)
 
         grid = buildGrid(["Food Truck", "Manager", "Food(s)"], trucks)
@@ -42,11 +44,12 @@ class CurrentInformation(QtWidgets.QWidget):
     def selectTruck(self):
         radio = self.sender()
         if radio.isChecked():
-            self.selectedTruck = radio.value
+            self.user.selectedTruck = radio.value
 
     def back(self):
-        self.selectedTruck = None
+        self.user.selectedTruck = None
         self.toHome.emit()
     
     def order(self):
-        self.toOrder.emit()
+        if self.user.selectedTruck != None:
+            self.toOrder.emit()
