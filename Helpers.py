@@ -19,6 +19,15 @@ def threeListToString(arr):
                 string += "\n"
     return string
 
+def buildList(strings, selectedIndices):
+    li = QtWidgets.QListWidget()
+    li.addItems(strings)
+    li.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+    if selectedIndices != None:
+        for index in selectedIndices:
+            li.item(index).setSelected(True)
+    return li
+
 def buildLabel(text):
     userLabel = QtWidgets.QLabel()
     userLabel.setText(text)

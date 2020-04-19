@@ -22,8 +22,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         self.stationCombobox = buildComboBox(stations)
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
         
-        self.staff = CheckableComboBox()
-        self.staff.addItems(viewFoodTruckAvailableStaff(self.user.username, name))
+        self.staff = buildList(viewFoodTruckAvailableStaff(self.user.username, name), staffList)
 
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
 
@@ -63,10 +62,14 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
             if price < 0:
                 return
             fprice = '{:.2f}'.format(price)
-            staffString = self.staff.currentText()
-            staffList = staffString.split(',')
+
+            staffItems = self.staff.selectedItems()
+            selectedIndices = []
+            for item in staffItems:
+                selectedIndices.append(self.staff.indexFromItem(item).row())
+
             self.user.menuItems.append((self.foodCombobox.currentText(), fprice))
-            self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
+            self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), selectedIndices)
         except ValueError:
             return
 
@@ -75,26 +78,24 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
             if self.user.menuItems[i][0] == foodName:
                 del self.user.menuItems[i]
         
-        staffString = self.staff.currentText()
-        staffList = staffString.split(',')
-        staffList.remove('')
-        self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
+        staffItems = self.staff.selectedItems()
+        selectedIndices = []
+        for item in staffItems:
+            selectedIndices.append(self.staff.indexFromItem(item).row())
+
+        self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), selectedIndices)
     
     def back(self):
         self.user.menuItems = []
         self.toManageFoodTruck.emit()
 
     def create(self):
-        staffString = self.staff.currentText()
-        staffList = staffString.split(', ')
-        for staff in staffList:
-            if staff == '':
-                staffList.remove('')
+        staffList = self.staff.selectedItems()
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
             createFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), self.user.username)
             for staff in staffList:
-                assignStaff(self.nameTextbox.text(), staff)
+                assignStaff(self.nameTextbox.text(), staff.text())
             for item in self.user.menuItems:
                 addMenuItem(self.nameTextbox.text(), item[1], item[0])
             

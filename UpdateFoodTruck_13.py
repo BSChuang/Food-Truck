@@ -22,8 +22,14 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         self.stationCombobox = buildComboBox(stations)
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
 
-        self.staff = CheckableComboBox()
-        self.staff.addItems(viewFoodTruckAvailableStaff(self.user.username, name))
+        availableStaff = viewFoodTruckAvailableStaff(self.user.username, name)
+        currentStaff = viewFoodTruckStaff(name)
+        staffIndices = []
+        for i in range(len(availableStaff)):
+            if availableStaff[i] in currentStaff:
+                staffIndices.append(i)
+
+        self.staff = buildList(availableStaff, staffIndices)
         # TODO autofill menu when opened
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
         menuList = viewFoodTruckMenu(name)+ self.user.menuItems
@@ -62,10 +68,14 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
             if price < 0:
                 return
             fprice = '{:.2f}'.format(price)
-            staffString = self.staff.currentText()
-            staffList = staffString.split(',')
+
+            staffItems = self.staff.selectedItems()
+            selectedIndices = []
+            for item in staffItems:
+                selectedIndices.append(self.staff.indexFromItem(item).row())
+
             self.user.menuItems.append((self.foodCombobox.currentText(), fprice))
-            self.toUpdateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
+            self.toUpdateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), selectedIndices)
         except ValueError:
             return
     
@@ -75,22 +85,12 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         self.toManageFoodTruck.emit()
 
     def update(self):
-        print(self.nameTextbox.text())
-        print(self.stationCombobox.currentText())
-        print(self.user.menuItems)
-        staffString = self.staff.currentText()
-        staffList = staffString.split(', ')
-        for staff in staffList:
-            if staff == '':
-                staffList.remove('')
-        print(staffList)
+        staffList = self.staff.selectedItems()
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
-            # if self.truckName != self.nameTextbox.text() :
-                # does not need to happen
             updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
             for staff in staffList:
-                updateFoodTruckStaff(self.truckName, staff)
+                updateFoodTruckStaff(self.truckName, staff.text())
             for item in self.user.menuItems:
                 addMenuItem(self.truckName, item[1], item[0])
             
