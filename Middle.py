@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "password"#sys.argv[1]
+dbPassword      = sys.argv[1]#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -226,6 +226,33 @@ def insertFood(foodName):
         con.commit()
 
     return True
+
+
+# CreateFoodTruck
+def createFoodTruck(foodTruckName, stationName, username):
+    with con as cursor:
+        query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
+        cursor.execute(query, (foodTruckName, stationName, username))
+        con.commit()
+
+    return True
+
+def addStaff(foodTruckName, staffName):
+    with con as cursor:
+        query = 'CALL mn_create_foodTruck_add_station(%s, %s)'
+        cursor.execute(query, (foodTruckName, staffName))
+        con.commit()
+
+    return True
+
+def addMenuItem(foodTruckName, price, foodName):
+    with con as cursor:
+        query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
+        cursor.execute(query, (foodTruckName, price, foodName))
+        con.commit()
+
+    return True
+
 
 #deleteFoodTruck_11
 # returns true if successful, false otw
