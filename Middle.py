@@ -238,7 +238,7 @@ def createFoodTruck(foodTruckName, stationName, username):
     return True
 
 def assignStaff(foodTruckName, staffFnameLname):
-    
+
     with con as cursor:
         names = staffFnameLname.split(' ')
         q = 'select username from user where firstname = %s and lastname = %s;'
@@ -496,7 +496,7 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName): 
+def viewFoodTruckMenu(foodTruckName):
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
