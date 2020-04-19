@@ -42,9 +42,12 @@ class UpdateBuildingWindow(QtWidgets.QWidget):
         return buildLayout('V', layoutList)
 
     def removeTag(self, tag):
-        removeTag(self.ogbuilding, tag)
-        self.user.tags.remove(tag)
-        self.toUpdateBuilding.emit()
+        if len(self.user.tags) >1 :
+            removeTag(self.ogbuilding, tag)
+            self.user.tags.remove(tag)
+            self.toUpdateBuilding.emit()
+        else :
+            print('you goon! each building must have at least 1 tag')
 
     def addTag(self):
         text = self.newTagTextbox.text()
