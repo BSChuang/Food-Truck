@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = 'password'#sys.argv[1]
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -239,7 +239,7 @@ def createFoodTruck(foodTruckName, stationName, username):
     try :
         with con as cursor:
             cursor.execute('call remaining_capacity(%s)', (stationName))
-            remainingCapacity = cursor.fetchall()[0][0]
+            remainingCapacity = cursor.fetchall()[0][1]
             if(remainingCapacity <= 0 ) :
                 return False
             query = 'CALL mn_create_foodTruck_add_station(%s, %s, %s)'
@@ -534,7 +534,7 @@ def updateFoodTruckStation(foodTruckName, stationName):
     try :
         with con as cursor:
             cursor.execute('call remaining_capacity(%s)', (stationName))
-            remainingCapacity = cursor.fetchall()[0][0]
+            remainingCapacity = cursor.fetchall()[0][1]
             if(remainingCapacity <= 0 ) :
                 return False
             cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))

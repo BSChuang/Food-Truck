@@ -180,13 +180,15 @@ DELIMITER //
 CREATE PROCEDURE remaining_capacity(
 				IN i_stationName VARCHAR(50))
 BEGIN
-DROP TABLE IF EXISTS mn_filter_foodTruck_result;
-CREATE TABLE capacity(stationName varchar(100), remainingCapacity int)
+DROP TABLE IF EXISTS rem_capacity_result;
+CREATE TABLE rem_capacity_result(stationName varchar(100), remainingCapacity int)
 	SELECT station.stationName, (station.capacity - occupied) as remainingCapacity
     FROM station
     INNER JOIN (SELECT stationName, COUNT(foodTruckName) as occupied FROM foodtruck group by stationName) a
     on a.stationName = station.stationName
-    WHERE station.stationName = i_stationName;    
+    WHERE station.stationName = i_stationName;
+    
+select * from rem_capacity_result;
 END //
 DELIMITER ;
 
