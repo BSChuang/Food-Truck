@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "password"#sys.argv[1]
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -239,8 +239,8 @@ def deleteFoodTruck(foodTruckName) :
     except IntegrityError :
         return False
 
-    
-    
+
+
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
 # sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
@@ -462,4 +462,11 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(username):
+def viewFoodTruckMenu(truckName):
+    result = []
+    with con as cursor:
+        query = 'CALL mn_view_foodTruck_menu(%s);'
+        cursor.execute(query, (truckName))
+        result = cursor.fetchall()
+
+    return result
