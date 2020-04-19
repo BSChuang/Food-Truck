@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = sys.argv[1]#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -26,12 +26,14 @@ def authenticateUser(username, password):
 # userType must be '', 'admin', 'manager', 'staff' otherwise sql will shit its pants
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
-        try:
+    with con as cursor:
+            #cant pass null to sql, as long as no email is given they won't be added to admin table
+            if userType == None or userType == '' :
+                userType = 'Admin'
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
-        except pymysql.err.IntegrityError:
-            return False
+
     return True
 
 # Home_03 line 22
@@ -510,13 +512,9 @@ def updateFoodTruckStation(foodTruckName, stationName):
         cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
         con.commit()
 
-def updateFoodTruckStaff(foodTruckName, staffFnameLname):
+def updateFoodTruckStaff(foodTruckName, staffName):
     with con as cursor:
-        names = staffFnameLname.split(' ')
-        q = 'select username from user where firstname = %s and lastname = %s;'
-        cursor.execute(q, (names[0], names[1]))
-        username = cursor.fetchall()[0][0]
-        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, username))
+        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, staffName))
         con.commit()
 
 def updateFoodTruckMenuItem(foodTruckName, price, foodName):
