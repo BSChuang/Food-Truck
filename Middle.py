@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "gojackets"
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -415,15 +415,9 @@ def submitOrder(username, truck, purchases, date):
         cursor.execute(query)
         ID = cursor.fetchall()[0][0]
         print(ID)
-<<<<<<< HEAD
-        query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
-        for purchase in purchases:
-            cursor.execute(query, (truck, purchases[0], purchases[1], ID))
-=======
         for purch in purchases :
             query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
             cursor.execute(query, (truck, purch[0], purch[1], ID))
->>>>>>> 84e6d5e210b7ebc9fd26d45745bb5933eb13bb47
         con.commit()
 
     return True
