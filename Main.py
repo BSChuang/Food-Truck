@@ -228,9 +228,9 @@ class Controller:
             self.manageFoodTruckWindow.close()
             self.showCreateFoodTruck()
 
-        def toUpdateFoodTruck(name):
+        def toUpdateFoodTruck(name, station):
             self.manageFoodTruckWindow.close()
-            self.showUpdateFoodTruck(name)
+            self.showUpdateFoodTruck(name, station)
 
         self.manageFoodTruckWindow = ManageFoodTruckWindow(self.user)
         self.manageFoodTruckWindow.toHome.connect(toHome)

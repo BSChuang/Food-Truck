@@ -18,8 +18,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         stations = getStationNames()
         if station != '' : 
             stations[0] = station
-        else :
-            stations[0] = 'PLACEHOLER' # TODO get current station
+
         self.stationCombobox = buildComboBox(stations)
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
 
