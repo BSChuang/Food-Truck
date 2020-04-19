@@ -21,10 +21,8 @@ class CreateFoodWindow(QtWidgets.QWidget):
         self.setLayout(layout)
 
     def create(self):
-        foods = getFoods()
-        if self.foodName.text() and self.foodName.text() not in foods:
-            insertFood(self.foodName.text())
-            self.back()
+        insertFood(self.foodName.text())
+        self.back()
     
     def back(self):
         self.toManageFood.emit()

@@ -23,6 +23,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
         
         self.staff = CheckableComboBox()
+		
         if staffList == None :
             self.staff.addItems(getStaff(self.user.username))
         else :

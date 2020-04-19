@@ -207,19 +207,22 @@ def manageFoodFilter(foodName, sortedBy, sortedDirection):
 # ManageFood_09
 # Removes the food from the database
 def deleteFood(foodName):
-    with con as cursor:
-        query = 'CALL ad_delete_food(%s)'
-        cursor.execute(query, foodName)
-        con.commit()
+    try :
+        with con as cursor:
+            query = 'CALL ad_delete_food(%s)'
+            cursor.execute(query, (foodName))
+            con.commit()
+            return True
+    except IntegrityError :
+        return False
 
-    return True
 
 # CreateFood_10
 # Inserts the new food into the database
 def insertFood(foodName):
     with con as cursor:
         query = 'CALL ad_create_food(%s)'
-        cursor.execute(query, foodName)
+        cursor.execute(query, (foodName))
         con.commit()
 
     return True
@@ -230,7 +233,7 @@ def deleteFoodTruck(foodTruckName) :
     try :
         with con as cursor:
             query = 'CALL mn_delete_foodTruck(%s)'
-            cursor.execute(query, foodTruckName)
+            cursor.execute(query, (foodTruckName))
             con.commit()
             return True
     except IntegrityError :
@@ -422,9 +425,6 @@ def submitOrder(username, truck, purchases, date):
 
     return True
 
-
-
-
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
@@ -440,3 +440,26 @@ def getOrderHistory(username):
 
     return result
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
+
+# foodtruck something, query 20a
+def viewFoodTruckAvailableStaff(username, foodTruckName):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_available_staff(%s);')
+        cursor.execute(query, (username, foodTruckName))
+        con.commit()
+        data = cursor.fetchall()
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
+
+# foodtruck something, query 20b
+def viewFoodTruckStaff(foodTruckName):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_staff(%s);')
+        cursor.execute(query, (foodTruckName))
+        con.commit()
+        data = cursor.fetchall()
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
+
+# foodtruck something, query 21
+def viewFoodTruckMenu(username):

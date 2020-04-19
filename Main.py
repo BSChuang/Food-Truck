@@ -19,8 +19,7 @@ from Explore_16 import ExploreWindow
 from CurrentInformation_17 import CurrentInformation
 from Order_18 import OrderWindow
 from OrderHistory_19 import OrderHistory
-from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter
-
+from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter, manageFoodFilter
 
 class Controller:
     def __init__(self):
@@ -64,7 +63,7 @@ class Controller:
         def toOrderHistory():
             self.homeWindow.close()
             self.showOrderHistory()
-        
+
         def toCurrentInformation():
             self.homeWindow.close()
             self.showCurrentInformation()
@@ -81,7 +80,7 @@ class Controller:
 
         def toManageFoodTruck():
             self.homeWindow.close()
-            # show all data when navigating to this 
+            # show all data when navigating to this
             self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
@@ -124,7 +123,7 @@ class Controller:
         def toUpdateStation(name, cap, bldg):
             self.manageBuildingStation.close()
             self.showUpdateStation(name, cap, bldg)
-        
+
         self.manageBuildingStation = ManageBuildingStationWindow(self.user)
         self.manageBuildingStation.toHome.connect(toHome)
         self.manageBuildingStation.toManageBuildingStation.connect(toManageBuildingStation)
@@ -193,6 +192,7 @@ class Controller:
 
         def toManageFood():
             self.manageFoodWindow.close()
+            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         def toCreateFood():
@@ -208,6 +208,7 @@ class Controller:
     def showCreateFood(self):
         def toManageFood():
             self.createFoodWindow.close()
+            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         self.createFoodWindow = CreateFoodWindow()
@@ -307,7 +308,7 @@ class Controller:
         self.exploreWindow.toHome.connect(toHome)
         self.exploreWindow.toExplore.connect(toExplore)
         self.exploreWindow.show()
-    
+
     def showCurrentInformation(self):
         def back():
             self.currentInformation.close()
@@ -335,7 +336,7 @@ class Controller:
         def back():
             self.orderHistory.close()
             self.showHome()
-        
+
         self.orderHistory = OrderHistory(self.user.username)
         self.orderHistory.toHome.connect(back)
         self.orderHistory.show()
@@ -350,6 +351,7 @@ class User:
 
 
 def main():
+    QtWidgets.QApplication.setStyle('Fusion')
     app = QtWidgets.QApplication(sys.argv)
     controller = Controller()
     controller.showLogin()

@@ -9,6 +9,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
 
     def __init__(self, user):
         self.user = user
+        self.selectedFood = None
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
@@ -54,8 +55,9 @@ class ManageFoodWindow(QtWidgets.QWidget):
         self.toHome.emit()
 
     def delete(self):
-        deleteFood(self.selectedFood)
-        self.toManageFood.emit()
+        if self.selectedFood is not None:
+            deleteFood(self.selectedFood)
+            self.toManageFood.emit()
 
     def create(self):
         self.toCreateFood.emit()
