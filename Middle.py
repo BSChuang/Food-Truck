@@ -29,11 +29,19 @@ def authenticateUser(username, password):
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
+            if balance == '' :
+                bal = None
+            else :
+                try :
+                    bal = float(balance)
+                except ValueError :
+                    bal = None
+                    
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
+            cursor.execute(query, (username, email, firstname, lastname, password, bal, userType))
             con.commit()
 
     return True
