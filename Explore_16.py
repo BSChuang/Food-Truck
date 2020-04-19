@@ -9,7 +9,7 @@ class ExploreWindow(QtWidgets.QWidget):
     def __init__(self, user):
         self.user = user
         self.username = user.username
-        
+
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
@@ -52,7 +52,7 @@ class ExploreWindow(QtWidgets.QWidget):
         for row in rows:
             station = buildRadioButton(row[0], self.selectStation)
             building = buildLabel(row[1])
-            trucks = buildLabel(listToString(row[2]))
+            trucks = buildLabel(listToString(row[2])+'\n')
             foods = buildLabel(listToString(row[3]))
             newList.append((station, building, trucks, foods))
         return newList
