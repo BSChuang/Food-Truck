@@ -57,6 +57,6 @@ class CreateBuildingWindow(QtWidgets.QWidget):
 
     def create(self):
         names = getBuildingNames()
-        if self.nameTextbox.text() not in names:
+        if self.nameTextbox.text() not in names and self.descTextbox.text() and len(self.user.tags) > 0:
             insertBuilding(self.nameTextbox.text(), self.descTextbox.text(), self.user.tags)
-        self.back()
+            self.back()

@@ -38,15 +38,20 @@ class OrderWindow(QtWidgets.QWidget):
         return newList
 
     def submit(self):
+        if not self.date.text():
+            return
+
         date = datetime.strptime(self.date.text(), '%m/%d/%Y')
         purchases = []
         for tup in self.purchaseQuantities:
             if tup[1].text():
                 purchases.append((tup[0], int(tup[1].text())))
         
-        if len(purchases) != 0:
-            submitOrder(self.user.username, self.user.selectedTruck, purchases, date)
-            self.back()
+        if len(purchases) == 0:
+            return
+        
+        submitOrder(self.user.username, self.user.selectedTruck, purchases, date)
+        self.back()
 
     def back(self):
         self.toCurrentInformation.emit()
