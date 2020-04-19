@@ -224,7 +224,7 @@ def insertFood(foodName):
 
     return True
 
-#Screen 11
+#deleteFoodTruck_11
 # returns true if successful, false otw
 def deleteFoodTruck(foodTruckName) :
     try :
@@ -301,6 +301,17 @@ def getBuildingNames():
     for li in nested_list:
         buildings.append(li[0])
     return buildings
+
+#SummaryDetail_15
+# get food truck summary detail
+def getFoodTruckSummary(username, truckName) :
+    with con as cursor:
+        query = 'call mn_summary_detail(%s, %s)'
+        cursor.execute(query, (username, truckName))
+        cursor.execute('select * from mn_summary_detail_result', )
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3], data[i][4].split(',')) for i in range(0, len(data))]
+    return result
 
 # Explore_16 line 17
 # Returns list of all station names
