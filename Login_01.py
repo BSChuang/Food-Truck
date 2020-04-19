@@ -29,8 +29,6 @@ class LoginWindow(QtWidgets.QWidget):
     def login(self):
         username = self.userTextbox.text()
         password = self.passTextbox.text()
-        print(username)
-        print(password)
         if username is '' or password is '':
             QMessageBox.about(self, "Login Error", "Must provide username and password.")
         elif authenticateUser(username, password):
