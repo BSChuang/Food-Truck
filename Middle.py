@@ -389,8 +389,9 @@ def submitOrder(username, truck, purchases, date):
         cursor.execute(query)
         ID = cursor.fetchall()[0][0]
         print(ID)
-        query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
-        cursor.execute(query, (truck, purchases[0][0], purchases[0][1], ID))
+        for purch in purchases :
+            query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
+            cursor.execute(query, (truck, purch[0], purch[1], ID))
         con.commit()
 
     return True
@@ -409,7 +410,7 @@ def getOrderHistory(username):
         # deal with null values
         data = [['' if j is None else j for j in i] for i in data]
         # reformat
-        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][2]) for i in range(0, len(data))]
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][4]) for i in range(0, len(data))]
 
     return result
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
