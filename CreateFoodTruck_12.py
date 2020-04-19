@@ -20,6 +20,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         stationLayout = buildLayout('H', [buildLabel("Station"), self.stationCombobox])
 
         self.staff = CheckableComboBox()
+        print(getStaff("Manager 1"))
         self.staff.addItems(getStaff("Manager 1"))
 
         staffLayout = buildLayout('H', [buildLabel("Assigned Staff"), self.staff])
