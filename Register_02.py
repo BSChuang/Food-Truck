@@ -30,10 +30,11 @@ class RegisterWindow(QtWidgets.QWidget):
 
         self.balanceTextbox = buildTextbox()
         balanceLayout = buildLayout("H", [buildLabel("Balance"), self.balanceTextbox])
-        self.employeeType = "customer"
-        adminRadio = buildRadioButton("admin", self.employee)
-        managerRadio = buildRadioButton("manager", self.employee)
-        staffRadio = buildRadioButton("staff", self.employee)
+        
+        self.employeeType = "Admin"
+        adminRadio = buildRadioButton("Admin", self.employee, True)
+        managerRadio = buildRadioButton("Manager", self.employee)
+        staffRadio = buildRadioButton("Staff", self.employee)
         hLayout4 = buildLayout('H', [balanceLayout, adminRadio, managerRadio, staffRadio])
 
         backButton = buildButton("Back", self.back)

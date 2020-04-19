@@ -8,6 +8,16 @@ def listToString(arr):
             string += ", "
     return string
 
+def threeListToString(arr):
+    string = ""
+    for i in range(len(arr)):
+        string += arr[i]
+        if i != len(arr) - 1:
+            string += ", "
+            if i % 3 == 2:
+                string += "\n"
+    return string
+
 def buildLabel(text):
     userLabel = QtWidgets.QLabel()
     userLabel.setText(text)

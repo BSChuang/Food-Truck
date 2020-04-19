@@ -5,7 +5,11 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
+<<<<<<< HEAD
+dbPassword      = "gojackets"
+=======
 dbPassword      = "password"
+>>>>>>> fa23b851f261f34b5c51b4a20395461314de550b
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -14,12 +18,10 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True
-
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != ():
+        if cursor.fetchall() != () or cursor.fetchall() is not None:
             return True
 
     return False
@@ -49,28 +51,27 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
-    return 'manager'
     result = []
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0:
-            result.append( 'admin')
+            result.append( 'Admin')
 
         query = "SELECT COUNT(username) FROM manager WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('manager')
+            result.append('Manager')
 
         query = "SELECT COUNT(username) FROM staff WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('staff')
+            result.append('Staff')
 
         query = "SELECT COUNT(username) FROM customer WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('customer')
+            result.append('Customer')
 
     return result
 
@@ -198,7 +199,7 @@ def updateStation(station, capacity, sponsoredBuilding):
 def manageFoodFilter(foodName, sortedBy, sortedDirection):
     if sortedBy == None :
         sortedBy = 'name'
-        
+
     with con as cursor :
         query = 'call ad_filter_food(%s, %s, %s);'
         cursor.execute(query, (foodName, sortedBy, sortedDirection))
@@ -365,14 +366,20 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
-    return [("Apple", 3), ("Banana", 5)]
+    menu = ()
+    with con as cursor:
+        query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
+        cursor.execute(query, (truckName))
+        menu = cursor.fetchall()
+        
+    return menu
 
 # Order_18
 # Purchases is list of tuple(foodName, quantity) and date is date
 def submitOrder(purchases, date):
     pass
 
-# TODO
+
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
