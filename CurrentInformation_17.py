@@ -38,8 +38,6 @@ class CurrentInformation(QtWidgets.QWidget):
             foods = buildLabel(listToString(truck[2]))
             newList.append((radio, manager, foods))
         return newList
-            
-
         
     def selectTruck(self):
         radio = self.sender()
