@@ -437,11 +437,20 @@ def getTruckMenu(truckName):
     return menu
 
 # Order_18
-# Purchases is list of tuple(foodName, quantity) and date is date
+# Purchases is list of tuple(foodName, quantity, price) and date is date
 #cus_order
 #cus_add_item
 def submitOrder(username, truck, purchases, date):
     with con as cursor:
+        total= 0
+        for entry in purchases: 
+            total += entry[1]*entry[2]
+        print(total)
+        cursor.execute('select balance from customer where username = %s', (username))
+        balance = cursor.fetchall()[0][0]
+        print(balance)
+        if total > balance:
+            return False
         query = 'CALL cus_order(%s, %s);'
         cursor.execute(query, (date, username))
         con.commit()
@@ -453,8 +462,8 @@ def submitOrder(username, truck, purchases, date):
             query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
             cursor.execute(query, (truck, purch[0], purch[1], ID))
         con.commit()
-
-    return True
+        return True
+    
 
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
