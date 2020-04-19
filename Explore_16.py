@@ -64,11 +64,13 @@ class ExploreWindow(QtWidgets.QWidget):
 
     def filter(self):
         self.user.filtered = exploreFilter(self.buildingNameComboBox.currentText(), self.stationNameComboBox.currentText(), self.buildingTagTextbox.text(), self.foodTruckNameTextbox.text(), self.foodTextbox.text())
+        print(self.user.filtered)
         self.toExplore.emit()
 
     def back(self):
         self.user.filtered = []
         self.toHome.emit()
+
     def selectAsLocation(self):
         if self.selectedStation:
             setUserStation(self.username, self.selectedStation)

@@ -55,8 +55,8 @@ class FoodTruckSummaryWindow(QtWidgets.QWidget):
 
     def filter(self):
         try:
-            dateMin = datetime.strptime(self.dateMin.text(), '%m/%d/%y')
-            dateMax = datetime.strptime(self.dateMax.text(), '%m/%d/%y')
+            dateMin = datetime.strptime(self.dateMin.text(), '%m/%d/%Y')
+            dateMax = datetime.strptime(self.dateMax.text(), '%m/%d/%Y')
             self.user.filtered = foodTruckSummaryFilter(self.user.username, self.truckNameTextbox.text(), self.stationNameTextbox.text(), dateMin, dateMax, None, None)
             self.toFoodTruckSummary.emit()
         except ValueError:

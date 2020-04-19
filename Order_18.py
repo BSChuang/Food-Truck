@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from Helpers import *
 from Middle import *
+from datetime import datetime
 
 class OrderWindow(QtWidgets.QWidget):
     toCurrentInformation = QtCore.pyqtSignal()
@@ -37,7 +38,7 @@ class OrderWindow(QtWidgets.QWidget):
         return newList
 
     def submit(self):
-        date = datetime.strptime(self.date.text(), '%m/%d/%y')
+        date = datetime.strptime(self.date.text(), '%m/%d/%Y')
         purchases = []
         for tup in self.purchaseQuantities:
             if tup[1].text():

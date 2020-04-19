@@ -6,7 +6,9 @@ class RegisterWindow(QtWidgets.QWidget):
     toLogin = QtCore.pyqtSignal()
     toHome = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, user):
+        self.user = user
+
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Register Window')
 
@@ -31,8 +33,8 @@ class RegisterWindow(QtWidgets.QWidget):
         self.balanceTextbox = buildTextbox()
         balanceLayout = buildLayout("H", [buildLabel("Balance"), self.balanceTextbox])
 
-        self.employeeType = "Admin"
-        adminRadio = buildRadioButton("Admin", self.employee, True)
+        self.employeeType = ""
+        adminRadio = buildRadioButton("Admin", self.employee)
         managerRadio = buildRadioButton("Manager", self.employee)
         staffRadio = buildRadioButton("Staff", self.employee)
         hLayout4 = buildLayout('H', [balanceLayout, adminRadio, managerRadio, staffRadio])
@@ -53,9 +55,12 @@ class RegisterWindow(QtWidgets.QWidget):
         self.toLogin.emit()
 
     def register(self): # TODO: Add new user to database ------------------------------------------------------------------------------------------------------------
+        if self.employeeType == "":
+            self.employeeType == None
         if self.passTextbox.text() == self.confirmTextbox.text() and insertUser(self.userTextbox.text(), self.passTextbox.text(), self.emailTextbox.text(), self.firstTextbox.text(), self.lastTextbox.text(), self.balanceTextbox.text(), self.employeeType):
             try:
                 float(self.balanceTextbox.text())
+                self.user.username = self.userTextbox.text()
                 self.toHome.emit()
             except ValueError:
                 print("Balance is formatted incorrectly")

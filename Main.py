@@ -49,7 +49,7 @@ class Controller:
             self.registerWindow.close()
             self.showHome()
 
-        self.registerWindow = RegisterWindow()
+        self.registerWindow = RegisterWindow(self.user)
         self.registerWindow.toLogin.connect(toLogin)
         self.registerWindow.toHome.connect(toHome)
         self.registerWindow.show()
