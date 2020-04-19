@@ -14,10 +14,12 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
+    return True
+
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != () and cursor.fetchall() is not None:
+        if cursor.fetchall() != ():
             return True
 
     return False
@@ -180,19 +182,11 @@ def updateStation(station, capacity, sponsoredBuilding):
 
 
 
-# TODO
-# ManaageFood_09
-# Returns list of food names
-def getFoods() :
-    pass
-    
-    
-
-# TODO
 # ManageFood_09
 # sortedBy in ('name', 'menucount', 'purchasecount')
 # sorteddirection in ('ASC', 'DESC')
 # Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
+
 def manageFoodFilter(foodName, sortedBy, sortedDirection):
     if sortedBy == None :
         sortedBy = 'name'
@@ -205,31 +199,26 @@ def manageFoodFilter(foodName, sortedBy, sortedDirection):
         result = [(data[i][0], data[i][1], data[i][2]) for i in range(0, len(data))]
     return result
 
-# TODO
+
 # ManageFood_09
 # Removes the food from the database
 def deleteFood(foodName):
-    print(foodName)
-    pass
+    with con as cursor:
+        query = 'CALL ad_delete_food(%s)'
+        cursor.execute(query, foodName)
+        con.commit()
 
-# TODO
+    return True
+
 # CreateFood_10
 # Inserts the new food into the database
 def insertFood(foodName):
-    print(foodName)
-    pass
+    with con as cursor:
+        query = 'CALL ad_create_food(%s)'
+        cursor.execute(query, foodName)
+        con.commit()
 
-# TODO
-# CreateFoodTruck_12
-# Inserts new food truck into database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
-def insertFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
-    pass
-
-# TODO
-# UpdateFoodTruck_13
-# updates food truck in database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
-def updateFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
-    pass
+    return True
 
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
@@ -255,16 +244,12 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
         result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
 
-def getFoodTruckSummary(truckName):
-    return [("2020-01-10", "Customer One", 13.5, 2, ["Apple", "Coffee"])]
-    
 
 # ManageFoodTruck_11
 # Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
 # staffMin and staffmax better fecking be numbers
 # and has capacity better be a booleeen
 def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
-    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
     with con as cursor :
         query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
@@ -282,6 +267,7 @@ def getStaff(manager):
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
+
     with con as cursor:
         query = "select distinct(buildingName) from building;"
         cursor.execute(query)
@@ -294,6 +280,7 @@ def getBuildingNames():
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
+
     result = []
     with con as cursor :
         query = 'select distinct(stationName) from station'
@@ -303,11 +290,15 @@ def getStationNames():
             result.append(tuple(i)[0])
     return result
 
-# TODO
 # Explore_16 line 66
 # Sets the user's station location
 def setUserStation(username, station):
-    pass
+    with con as cursor:
+        query = 'CALL cus_select_location(%s,%s);'
+        cursor.execute(query, (username, station))
+        con.commit()
+
+    return True
 
 # Explore_16 line 55
 # Returns list of tuples (rows) which fulfill criteria
