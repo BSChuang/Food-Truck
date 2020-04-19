@@ -6,7 +6,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
     toHome = QtCore.pyqtSignal()
     toManageFoodTruck = QtCore.pyqtSignal()
     toCreateFoodTruck = QtCore.pyqtSignal()
-    toUpdateFoodTruck = QtCore.pyqtSignal()
+    toUpdateFoodTruck = QtCore.pyqtSignal(str)
 
     def __init__(self, user):
         self.user = user
@@ -81,7 +81,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
     def update(self):
         print(self.user.selectedTruck)
         if self.user.selectedTruck != None:
-            self.toUpdateFoodTruck.emit()
+            self.toUpdateFoodTruck.emit(self.user.selectedTruck)
 
     def delete(self):
         if self.user.selectedTruck != None:
