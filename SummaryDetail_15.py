@@ -13,7 +13,7 @@ class SummaryDetailWindow(QtWidgets.QWidget):
         grid = buildGrid(["Date", "Customer", "Total Purchase", "# Orders", "Food(s)"], self.formatForGrid(details))
         backButton = buildButton("Back", self.back)
 
-        layout = buildLayout('V', [buildLabel("Food Truck Name: " + user.selectedTruck), grid, backButton])
+        layout = buildLayout('V', [buildLabel("Summary Detail"), buildLabel("Food Truck Name: " + user.selectedTruck), grid, backButton])
 
         self.setLayout(layout)
 
@@ -27,7 +27,7 @@ class SummaryDetailWindow(QtWidgets.QWidget):
             foods = buildLabel(listToString(row[4]))
             foodName = buildLabel(row[0])
             price = buildLabel(str(row[1]))
-            newList.append((foodName, price))
+            newList.append((date, customer, totalPurchase, numOrders, foods, foodName, price))
         return newList
 
     def back(self):

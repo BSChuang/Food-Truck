@@ -32,6 +32,6 @@ class CreateStationWindow(QtWidgets.QWidget):
         self.toManageBuildingStation.emit()
 
     def create(self):
-        if(not self.nameTextbox.text() == '' and int(self.capacityTextbox.text()) >= 0) :
+        if self.nameTextbox.text() and self.capacityTextbox.text() and int(self.capacityTextbox.text()) >= 0:
             insertStation(self.nameTextbox.text(), int(self.capacityTextbox.text()), self.sponsoredCombobox.currentText())
             self.back()

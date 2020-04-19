@@ -41,7 +41,11 @@ class OrderWindow(QtWidgets.QWidget):
         if not self.date.text():
             return
 
-        date = datetime.strptime(self.date.text(), '%m/%d/%Y')
+        try:
+            date = datetime.strptime(self.date.text(), '%m/%d/%Y')
+        except ValueError:
+            return
+            
         purchases = []
         for tup in self.purchaseQuantities:
             if tup[1].text():

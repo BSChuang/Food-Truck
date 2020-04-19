@@ -79,10 +79,12 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.toCreateFoodTruck.emit()
 
     def update(self):
-        self.toUpdateFoodTruck.emit()
+        if self.user.selectedTruck != None:
+            self.toUpdateFoodTruck.emit()
 
     def delete(self):
-        pass
+        if self.user.selectedTruck != None:
+            deleteFoodTruck(self.user.selectedTruck)
 
 
         
