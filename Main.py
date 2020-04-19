@@ -292,7 +292,7 @@ class Controller:
 
         self.summaryDetailWindow = SummaryDetailWindow(self.user)
         self.summaryDetailWindow.toFoodTruckSummary.connect(toFoodTruckSummary)
-        self.show()
+        self.summaryDetailWindow.show()
 
     def showExplore(self):
         def toHome():
