@@ -442,17 +442,24 @@ def getOrderHistory(username):
     # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
 
 # foodtruck something, query 20a
-def viewFoodTruckAvailableStaff(username):
+def viewFoodTruckAvailableStaff(username, foodTruckName):
     with con as cursor:
         query = ('call mn_view_foodTruck_available_staff(%s);')
-        cursor.execute(query, (username))
+        cursor.execute(query, (username, foodTruckName))
         con.commit()
         data = cursor.fetchall()
-
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
 
 # foodtruck something, query 20b
-def viewFoodTruckStaff(username):
-
+def viewFoodTruckStaff(foodTruckName):
+    with con as cursor:
+        query = ('call mn_view_foodTruck_staff(%s);')
+        cursor.execute(query, (foodTruckName))
+        con.commit()
+        data = cursor.fetchall()
+        result = [(data[i][1]) for i in range(0, len(data))]
+    return result
 
 # foodtruck something, query 21
 def viewFoodTruckMenu(username):
