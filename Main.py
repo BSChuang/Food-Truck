@@ -192,7 +192,6 @@ class Controller:
 
         def toManageFood():
             self.manageFoodWindow.close()
-            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         def toCreateFood():
@@ -348,6 +347,8 @@ class User:
         self.tags = []
         self.menuItems = []
         self.selectedTruck = None
+        self.sortBy = None
+        self.sortDir = None
 
 
 def main():

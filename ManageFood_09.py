@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from Helpers import *
 from Middle import *
+import operator
 
 class ManageFoodWindow(QtWidgets.QWidget):
     toManageFood = QtCore.pyqtSignal()
@@ -20,7 +21,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
         if self.user.filtered == []:
             self.user.filtered = manageFoodFilter(None, None, None) # TODO implement sorting
 
-        grid = buildGrid(["Name", "Menu Count", "Purchase Count"], self.formatForGrid(self.user.filtered))
+        grid = buildGrid(["Name", "Menu Count", "Purchase Count"], self.formatForGrid(self.user.filtered), user, self)
 
         backButton = buildButton("Back", self.back)
         deleteButton = buildButton("Delete", self.delete)
@@ -49,6 +50,20 @@ class ManageFoodWindow(QtWidgets.QWidget):
     def filter(self):
         self.user.filtered = manageFoodFilter(self.foodNameCombobox.currentText(), None, None) # TODO implement sorting
         self.toManageFood.emit()
+
+    def sorting(self): # Sort self.user.filtered by the self.user.sortBy and self.user.sortDir
+        if self.user.sortBy == "Name":
+            self.user.filtered.sort(key=operator.itemgetter(0))
+        elif self.user.sortBy == "Menu Count":
+            self.user.filtered.sort(key=operator.itemgetter(1))
+        elif self.user.sortBy == "Purchase Count":
+            self.user.filtered.sort(key=operator.itemgetter(2))
+
+        if self.user.sortDir == "ASC":
+            self.user.filtered.reverse()
+        
+        self.toManageFood.emit()
+
 
     def back(self):
         self.user.filtered = []

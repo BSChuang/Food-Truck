@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
+from functools import partial
 
 def listToString(arr):
     string = ""
@@ -47,15 +48,28 @@ def buildComboBox(items):
     comboBox.addItems(items)
     return comboBox
 
-def buildGrid(attrNames, items):
+def buildGrid(attrNames, items, user=None, window=None):
     """
         attrNames: List of attribute names
         items: List of tuples. Each tuple should have length equal to the length of attrNames. Each item in the tuple should be a widget
     """
 
+    def sortBy(attrName):
+        if user.sortBy == attrName:
+            dic = {None: "ASC", "ASC": "DESC", "DESC": "ASC"}
+            user.sortDir = dic[user.sortDir]
+        else:    
+            user.sortBy = attrName
+        window.sorting()
+
     layout = QtWidgets.QGridLayout()
     for i in range(len(attrNames)):
-        layout.addWidget(buildLabel(attrNames[i]), 0, i)
+        if user != None:
+            sortButton = buildButton(attrNames[i], partial(lambda i: sortBy(attrNames[i]), i=i))
+            layout.addWidget(sortButton, 0, i)
+        else:
+            layout.addWidget(buildLabel(attrNames[i]), 0, i)
+
         for j in range(len(items)):
             if type(items[j][i]) == QtWidgets.QHBoxLayout or type(items[j][i]) == QtWidgets.QVBoxLayout:
                 layout.addLayout(items[j][i], j+1, i)
