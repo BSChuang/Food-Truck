@@ -182,7 +182,7 @@ def getFoods() :
         cursor.execute('select * from food;',)
         data = cursor.fetchall()
         return [i[0] for i in data]
-        
+
 
 
 # ManageFood_09
@@ -380,10 +380,10 @@ def submitOrder(username, truck, purchases, date):
         con.commit()
         query = 'SELECT MAX(orderID) from orders;'
         cursor.execute(query)
-        ID = cursor.fetchall()[0]
+        ID = cursor.fetchall()[0][0]
         print(ID)
         query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
-        cursor.execute(query, (truck, purchases[0], purchases[1], ID))
+        cursor.execute(query, (truck, purchases[0][0], purchases[0][1], ID))
         con.commit()
 
     return True
