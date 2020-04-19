@@ -83,7 +83,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
         print(staffList)
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0:
-            if self.truckName != self.nameTextbox.text() :
+            # if self.truckName != self.nameTextbox.text() :
                 # does not need to happen
             updateFoodTruckStation(self.truckName, self.stationCombobox.currentText())
             for staff in staffList:
