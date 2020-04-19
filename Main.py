@@ -21,7 +21,6 @@ from Order_18 import OrderWindow
 from OrderHistory_19 import OrderHistory
 from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter
 
-
 class Controller:
     def __init__(self):
         self.user = User()
@@ -64,7 +63,7 @@ class Controller:
         def toOrderHistory():
             self.homeWindow.close()
             self.showOrderHistory()
-        
+
         def toCurrentInformation():
             self.homeWindow.close()
             self.showCurrentInformation()
@@ -81,7 +80,7 @@ class Controller:
 
         def toManageFoodTruck():
             self.homeWindow.close()
-            # show all data when navigating to this 
+            # show all data when navigating to this
             self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
@@ -124,7 +123,7 @@ class Controller:
         def toUpdateStation(name, cap, bldg):
             self.manageBuildingStation.close()
             self.showUpdateStation(name, cap, bldg)
-        
+
         self.manageBuildingStation = ManageBuildingStationWindow(self.user)
         self.manageBuildingStation.toHome.connect(toHome)
         self.manageBuildingStation.toManageBuildingStation.connect(toManageBuildingStation)
@@ -256,7 +255,7 @@ class Controller:
         def toManageFoodTruck():
             self.updateFoodTruckWindow.close()
             self.showManageFoodTruck()
-        
+
         def toUpdateFoodTruck():
             self.updateFoodTruckWindow.close()
             self.showUpdateFoodTruck()
@@ -307,7 +306,7 @@ class Controller:
         self.exploreWindow.toHome.connect(toHome)
         self.exploreWindow.toExplore.connect(toExplore)
         self.exploreWindow.show()
-    
+
     def showCurrentInformation(self):
         def back():
             self.currentInformation.close()
@@ -335,7 +334,7 @@ class Controller:
         def back():
             self.orderHistory.close()
             self.showHome()
-        
+
         self.orderHistory = OrderHistory(self.user.username)
         self.orderHistory.toHome.connect(back)
         self.orderHistory.show()

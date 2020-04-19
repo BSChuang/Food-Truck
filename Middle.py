@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -390,7 +390,8 @@ def submitOrder(username, truck, purchases, date):
         ID = cursor.fetchall()[0][0]
         print(ID)
         query = 'CALL cus_add_item_to_order(%s, %s, %s, %s)'
-        cursor.execute(query, (truck, purchases[0][0], purchases[0][1], ID))
+        for purchase in purchases:
+            cursor.execute(query, (truck, purchases[0], purchases[1], ID))
         con.commit()
 
     return True
