@@ -30,9 +30,13 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
-            query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
-            con.commit()
+
+            try:
+                query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
+                cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
+                con.commit()
+            except pymysql.err.IntegrityError:
+                return False
 
     return True
 
@@ -238,7 +242,7 @@ def createFoodTruck(foodTruckName, stationName, username):
     return True
 
 def assignStaff(foodTruckName, staffFnameLname):
-    
+
     with con as cursor:
         names = staffFnameLname.split(' ')
         q = 'select username from user where firstname = %s and lastname = %s;'
@@ -496,7 +500,7 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName): 
+def viewFoodTruckMenu(foodTruckName):
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
