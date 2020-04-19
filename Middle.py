@@ -27,11 +27,19 @@ def authenticateUser(username, password):
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
+            if balance == '' :
+                bal = None
+            else :
+                try :
+                    bal = float(balance)
+                except ValueError :
+                    bal = None
+                    
             #cant pass null to sql, as long as no email is given they won't be added to admin table
             if userType == None or userType == '' :
                 userType = 'Admin'
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
-            cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
+            cursor.execute(query, (username, email, firstname, lastname, password, bal, userType))
             con.commit()
 
     return True
@@ -187,7 +195,7 @@ def updateStation(station, capacity, sponsoredBuilding):
 def manageFoodFilter(foodName, sortedBy, sortedDirection):
     if sortedBy == None :
         sortedBy = 'name'
-        
+
     with con as cursor :
         query = 'call ad_filter_food(%s, %s, %s);'
         cursor.execute(query, (foodName, sortedBy, sortedDirection))
@@ -354,14 +362,20 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
-    return [("Apple", 3), ("Banana", 5)]
+    menu = ()
+    with con as cursor:
+        query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
+        cursor.execute(query, (truckName))
+        menu = cursor.fetchall()
+        
+    return menu
 
 # Order_18
 # Purchases is list of tuple(foodName, quantity) and date is date
 def submitOrder(purchases, date):
     pass
 
-# TODO
+
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
