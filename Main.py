@@ -222,7 +222,6 @@ class Controller:
 
         def toManageFoodTruck():
             self.manageFoodTruckWindow.close()
-            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
         def toCreateFoodTruck():
