@@ -86,6 +86,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), selectedIndices)
     
     def back(self):
+        self.user.selectedTruck = None
         self.user.menuItems = []
         self.toManageFoodTruck.emit()
 

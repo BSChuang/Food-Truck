@@ -7,6 +7,7 @@ class SummaryDetailWindow(QtWidgets.QWidget):
 
     def __init__(self, user):
         QtWidgets.QWidget.__init__(self)
+        self.user = user
         self.setWindowTitle('Window')
 
         details = getFoodTruckSummary(user.username, user.selectedTruck)
@@ -29,4 +30,5 @@ class SummaryDetailWindow(QtWidgets.QWidget):
         return newList
 
     def back(self):
+        self.user.selectedTruck = None
         self.toFoodTruckSummary.emit()

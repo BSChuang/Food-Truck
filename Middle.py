@@ -27,13 +27,12 @@ def authenticateUser(username, password):
 # Return True if able to add user, False otherwise (this is impossible/difficult bc no feedback from server procedure)
 def insertUser(username, password, email, firstname, lastname, balance, userType):
     with con as cursor:
-            #cant pass null to sql, as long as no email is given they won't be added to admin table
-            if userType == None or userType == '' :
-                userType = 'Admin'
+        try:
             query = "CALL register(%s, %s, %s, %s, %s, %s, %s);"
             cursor.execute(query, (username, email, firstname, lastname, password, balance, userType))
             con.commit()
-
+        except pymysql.err.IntegrityError:
+            return False
     return True
 
 # Home_03 line 22
@@ -238,7 +237,7 @@ def createFoodTruck(foodTruckName, stationName, username):
     return True
 
 def assignStaff(foodTruckName, staffFnameLname):
-    
+
     with con as cursor:
         names = staffFnameLname.split(' ')
         q = 'select username from user where firstname = %s and lastname = %s;'
@@ -428,6 +427,7 @@ def getTrucksAtStation(username):
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
+    print(truckName)
     menu = ()
     with con as cursor:
         query = 'SELECT foodName, price FROM foodtruck NATURAL JOIN menuitem WHERE foodtruckName = %s'
@@ -495,7 +495,7 @@ def viewFoodTruckStaff(foodTruckName):
     return result
 
 # foodtruck something, query 21
-def viewFoodTruckMenu(foodTruckName): 
+def viewFoodTruckMenu(foodTruckName):
     result = []
     with con as cursor:
         query = 'CALL mn_view_foodTruck_menu(%s);'
@@ -511,13 +511,9 @@ def updateFoodTruckStation(foodTruckName, stationName):
         cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
         con.commit()
 
-def updateFoodTruckStaff(foodTruckName, staffFnameLname):
+def updateFoodTruckStaff(foodTruckName, staffName):
     with con as cursor:
-        names = staffFnameLname.split(' ')
-        q = 'select username from user where firstname = %s and lastname = %s;'
-        cursor.execute(q, (names[0], names[1]))
-        username = cursor.fetchall()[0][0]
-        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, username))
+        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, staffName))
         con.commit()
 
 def updateFoodTruckMenuItem(foodTruckName, price, foodName):
