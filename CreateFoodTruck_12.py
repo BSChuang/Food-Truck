@@ -84,7 +84,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
 
     def create(self):
         staffString = self.staff.currentText()
-        staffList = staffString.split(',')
+        staffList = staffString.split(', ')
         for staff in staffList:
             if staff == '':
                 staffList.remove('')
