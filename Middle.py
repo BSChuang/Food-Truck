@@ -282,24 +282,18 @@ def getStaff(manager):
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
-    return ['a', 'b', 'c']
-
     with con as cursor:
         query = "select distinct(buildingName) from building;"
         cursor.execute(query)
         nested_list = cursor.fetchall()
-
     buildings = [''] # we need an empty string at the beginning so the drop down boxes can start empty
     for li in nested_list:
         buildings.append(li[0])
-
     return buildings
 
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
-    return ['d', 'e', 'f']
-
     result = []
     with con as cursor :
         query = 'select distinct(stationName) from station'
@@ -307,7 +301,6 @@ def getStationNames():
         result = [''] # we need an empty string at the beginning so the drop down boxes can start empty
         for i in cursor.fetchall():
             result.append(tuple(i)[0])
-
     return result
 
 # TODO
@@ -370,8 +363,18 @@ def getTrucksAtStation(username):
     return result
     #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
-# TODO
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
-    return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
+    with con as cursor:
+        query = ('call cus_order_history(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data = cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][2]) for i in range(0, len(data))]
+
+    return result
+    # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
