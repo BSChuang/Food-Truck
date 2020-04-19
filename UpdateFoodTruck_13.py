@@ -79,5 +79,10 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
                 staffList.remove('')
 
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
-            updateFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList, self.user.menuItems)
+            updateFoodTruckStation(self.nameTextbox.text(), self.stationCombobox.currentText())
+            for staff in staffList:
+                updateFoodTruckStaff(self.nameTextbox.text(), staff)
+            for item in self.user.menuItems:
+                updateFoodTruckMenuItem(self.nameTextbox.text(), item[1], item[0])
+            
             self.back()
