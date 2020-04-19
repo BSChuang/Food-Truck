@@ -311,6 +311,7 @@ class Controller:
 
         def order():
             self.currentInformation.close()
+            self.order.show()
 
         self.currentInformation = CurrentInformation(self.user.username)
         self.currentInformation.toHome.connect(back)
