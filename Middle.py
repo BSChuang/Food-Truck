@@ -1,6 +1,7 @@
 import sys
 import pymysql
 import datetime
+from pymysql import IntegrityError
 
 #creating a connection
 dbServerName    = "localhost"
@@ -223,6 +224,20 @@ def insertFood(foodName):
 
     return True
 
+#Screen 11
+# returns true if successful, false otw
+def deleteFoodTruck(foodTruckName) :
+    try :
+        with con as cursor:
+            query = 'CALL mn_delete_foodTruck(%s)'
+            cursor.execute(query, foodTruckName)
+            con.commit()
+            return True
+    except IntegrityError :
+        return False
+
+    
+    
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
 # sorted by should be (None, 'foodTruckName', 'totalOrder', 'totalRevenue', 'totalCustomer')
