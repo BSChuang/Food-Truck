@@ -4,6 +4,12 @@ from Login_01 import LoginWindow
 from Register_02 import RegisterWindow
 from Home_03 import HomeWindow
 from ManageBuildingStationWindow_04 import ManageBuildingStationWindow
+<<<<<<< HEAD
+=======
+from Explore_16 import ExploreWindow
+from CurrentInformation_17 import CurrentInformation
+from OrderHistory_19 import OrderHistory
+>>>>>>> e74846aa0ed35a56db8460d5bc4dfe47558e5669
 from CreateBuilding_05 import CreateBuildingWindow
 from UpdateBuilding_06 import UpdateBuildingWindow
 from CreateStation_07 import CreateStationWindow
@@ -15,10 +21,13 @@ from CreateFoodTruck_12 import CreateFoodTruckWindow
 from UpdateFoodTruck_13 import UpdateFoodTruckWindow
 from FoodTruckSummary_14 import FoodTruckSummaryWindow
 from SummaryDetail_15 import SummaryDetailWindow
+<<<<<<< HEAD
 from Explore_16 import ExploreWindow
 from CurrentInformation_17 import CurrentInformation
 from Order_18 import OrderWindow
 from OrderHistory_19 import OrderHistory
+=======
+>>>>>>> e74846aa0ed35a56db8460d5bc4dfe47558e5669
 from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter
 
 

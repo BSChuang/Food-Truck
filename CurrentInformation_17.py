@@ -47,7 +47,10 @@ class CurrentInformation(QtWidgets.QWidget):
             self.selectedTruck = radio.value
 
     def back(self):
+<<<<<<< HEAD
         self.selectedTruck = None
+=======
+>>>>>>> e74846aa0ed35a56db8460d5bc4dfe47558e5669
         self.toHome.emit()
     
     def order(self):
