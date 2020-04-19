@@ -39,28 +39,27 @@ def insertUser(username, password, email, firstname, lastname, balance, userType
 # Home_03 line 22
 # Returns a list of types that the user belongs to, or an empty list if they are not found
 def getUserType(username):
-    return 'manager'
     result = []
     with con as cursor:
         query = "SELECT COUNT(username) FROM admin WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0:
-            result.append( 'admin')
+            result.append( 'Admin')
 
         query = "SELECT COUNT(username) FROM manager WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('manager')
+            result.append('Manager')
 
         query = "SELECT COUNT(username) FROM staff WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('staff')
+            result.append('Staff')
 
         query = "SELECT COUNT(username) FROM customer WHERE username = %s"
         cursor.execute(query, (username))
         if cursor.fetchall()[0][0] > 0 :
-            result.append('customer')
+            result.append('Customer')
 
     return result
 
