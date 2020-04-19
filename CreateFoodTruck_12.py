@@ -92,7 +92,7 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
         if self.nameTextbox.text() and self.stationCombobox.currentText() and len(staffList) != 0 and len(self.user.menuItems) != 0:
             createFoodTruck(self.nameTextbox.text(), self.stationCombobox.currentText(), self.user.username)
             for staff in staffList:
-                addStaff(self.nameTextbox.text(), staff)
+                assignStaff(self.nameTextbox.text(), staff)
             for item in self.user.menuItems:
                 addMenuItem(self.nameTextbox.text(), item[1], item[0])
             
