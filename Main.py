@@ -19,7 +19,7 @@ from Explore_16 import ExploreWindow
 from CurrentInformation_17 import CurrentInformation
 from Order_18 import OrderWindow
 from OrderHistory_19 import OrderHistory
-from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter
+from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter, foodTruckSummaryFilter, manageFoodFilter
 
 class Controller:
     def __init__(self):
@@ -192,6 +192,7 @@ class Controller:
 
         def toManageFood():
             self.manageFoodWindow.close()
+            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         def toCreateFood():
@@ -207,6 +208,7 @@ class Controller:
     def showCreateFood(self):
         def toManageFood():
             self.createFoodWindow.close()
+            self.user.filtered = manageFoodFilter(None, None, None)
             self.showManageFood()
 
         self.createFoodWindow = CreateFoodWindow()
