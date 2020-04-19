@@ -237,7 +237,7 @@ def createFoodTruck(foodTruckName, stationName, username):
 
     return True
 
-def addStaff(foodTruckName, staffFnameLname):
+def assignStaff(foodTruckName, staffFnameLname):
     
     with con as cursor:
         names = staffFnameLname.split(' ')

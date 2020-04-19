@@ -222,6 +222,7 @@ class Controller:
 
         def toManageFoodTruck():
             self.manageFoodTruckWindow.close()
+            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
         def toCreateFoodTruck():
@@ -242,6 +243,7 @@ class Controller:
     def showCreateFoodTruck(self, name = '', station = '', assignedStaff = None):
         def toManageFoodTruck():
             self.createFoodTruckWindow.close()
+            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
 
         def toCreateFoodTruck(name, station, assignedStaff):
@@ -256,6 +258,7 @@ class Controller:
     def showUpdateFoodTruck(self, name = '', station = '', assignedStaff = None):
         def toManageFoodTruck():
             self.updateFoodTruckWindow.close()
+            self.user.filtered = manageFoodTruckFilter(self.user.username, None, None, None, None, False)
             self.showManageFoodTruck()
         
         def toUpdateFoodTruck(name, station, assignedStaff):
