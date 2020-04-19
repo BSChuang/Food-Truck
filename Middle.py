@@ -505,3 +505,19 @@ def viewFoodTruckMenu(foodTruckName):
         data = cursor.fetchall()
         result = [(data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
+
+# updateFoodTruck
+def updateFoodTruckStation(foodTruckName, stationName):
+    with con as cursor:
+        cursor.execute('call mn_update_foodTruck_station(%s, %s)', (foodTruckName, stationName))
+        con.commit()
+
+def updateFoodTruckStaff(foodTruckName, staffName):
+    with con as cursor:
+        cursor.execute('call mn_update_foodTruck_staff(%s, %s)', (foodTruckName, staffName))
+        con.commit()
+
+def updateFoodTruckMenuItem(foodTruckName, price, foodName):
+    with con as cursor:
+        cursor.execute('call mn_update_foodTruck_menu_item(%s, %s, %s)', (foodTruckName, price, foodName))
+        con.commit()
