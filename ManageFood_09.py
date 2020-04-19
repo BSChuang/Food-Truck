@@ -17,7 +17,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
         hLayout1 = buildLayout('H', [buildLabel("Name"), self.foodNameCombobox, filterButton])
 
         if self.user.filtered == []:
-            self.user.filtered = manageFoodFilter(None)
+            self.user.filtered = manageFoodFilter(None, None, None) # TODO implement sorting
 
         grid = buildGrid(["Name", "Menu Count", "Purchase Count"], self.formatForGrid(self.user.filtered))
 
@@ -46,7 +46,7 @@ class ManageFoodWindow(QtWidgets.QWidget):
             self.selectedFood = radio.value
         
     def filter(self):
-        self.user.filtered = manageFoodFilter(self.foodNameCombobox.currentText())
+        self.user.filtered = manageFoodFilter(self.foodNameCombobox.currentText(), None, None) # TODO implement sorting
         self.toManageFood.emit()
 
     def back(self):

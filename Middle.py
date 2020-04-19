@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "password"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -178,20 +178,32 @@ def updateStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
         con.commit()
 
+
+
 # TODO
 # ManaageFood_09
 # Returns list of food names
-def getFoods():
-    return ["Apple", "Banana", "Chocolate"]
+def getFoods() :
+    pass
+    
+    
 
 # TODO
 # ManageFood_09
+# sortedBy in ('name', 'menucount', 'purchasecount')
+# sorteddirection in ('ASC', 'DESC')
 # Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
-def manageFoodFilter(foodName):
-    if foodName == None: # Return list of all foods
-        return [("Apple", 10, 20), ("Banana", 1, 2)]
-    else: # Return only that food
-        return [("Banana", 1, 2)]
+def manageFoodFilter(foodName, sortedBy, sortedDirection):
+    if sortedBy == None :
+        sortedBy = 'name'
+        
+    with con as cursor :
+        query = 'call ad_filter_food(%s, %s, %s);'
+        cursor.execute(query, (foodName, sortedBy, sortedDirection))
+        cursor.execute('select * from ad_filter_food_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2]) for i in range(0, len(data))]
+    return result
 
 # TODO
 # ManageFood_09
