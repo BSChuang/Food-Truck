@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "gojackets"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -265,7 +265,14 @@ def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, 
 # CreateFoodTruck_12
 # returns staff of manager
 def getStaff(manager):
-    return ["Staff 1", "Staff 2,", "Staff 3"]
+    staff = []
+    with con as cursor:
+        query = 'select username from foodtruck natural join staff where managerUsername = %s;'
+        cursor.execute(query, (manager))
+        for li in cursor.fetchall():
+            staff.append(li[0])
+
+    return staff
 
 # Explore_16 line 13
 # Returns list of all building names
