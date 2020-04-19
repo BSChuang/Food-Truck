@@ -5,7 +5,7 @@ import datetime
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = sys.argv[1]
+dbPassword      = "password"
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -14,10 +14,12 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
+    return True
+
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall() != () and cursor.fetchall() is not None:
+        if cursor.fetchall() != ():
             return True
 
     return False
@@ -178,46 +180,45 @@ def updateStation(station, capacity, sponsoredBuilding):
         cursor.execute('call ad_update_station(%s, %s, %s)', (station, capacity, sponsoredBuilding))
         con.commit()
 
-# TODO
-# ManaageFood_09
-# Returns list of food names
-def getFoods():
-    return ["Apple", "Banana", "Chocolate"]
 
-# TODO
+
 # ManageFood_09
+# sortedBy in ('name', 'menucount', 'purchasecount')
+# sorteddirection in ('ASC', 'DESC')
 # Returns list of tuples. Tuples are in format (foodName, MenuCount, PurchaseCount)
-def manageFoodFilter(foodName):
-    if foodName == None: # Return list of all foods
-        return [("Apple", 10, 20), ("Banana", 1, 2)]
-    else: # Return only that food
-        return [("Banana", 1, 2)]
 
-# TODO
+def manageFoodFilter(foodName, sortedBy, sortedDirection):
+    if sortedBy == None :
+        sortedBy = 'name'
+        
+    with con as cursor :
+        query = 'call ad_filter_food(%s, %s, %s);'
+        cursor.execute(query, (foodName, sortedBy, sortedDirection))
+        cursor.execute('select * from ad_filter_food_result',)
+        data = cursor.fetchall()
+        result = [(data[i][0], data[i][1], data[i][2]) for i in range(0, len(data))]
+    return result
+
+
 # ManageFood_09
 # Removes the food from the database
 def deleteFood(foodName):
-    print(foodName)
-    pass
+    with con as cursor:
+        query = 'CALL ad_delete_food(%s)'
+        cursor.execute(query, foodName)
+        con.commit()
 
-# TODO
+    return True
+
 # CreateFood_10
 # Inserts the new food into the database
 def insertFood(foodName):
-    print(foodName)
-    pass
+    with con as cursor:
+        query = 'CALL ad_create_food(%s)'
+        cursor.execute(query, foodName)
+        con.commit()
 
-# TODO
-# CreateFoodTruck_12
-# Inserts new food truck into database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
-def insertFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
-    pass
-
-# TODO
-# UpdateFoodTruck_13
-# updates food truck in database. assigned staff is list of staff names, menu items is list of (foodName, price)'s
-def updateFoodTruck(foodTruckName, stationName, assignedStaff, menuItems):
-    pass
+    return True
 
 # Screen 14 Manager Food Truck Summary - Ben IK you haven't done this one yet but im ahead of u
 # dates should be valid dates (python datetime.date), or they will be turned to None
@@ -243,16 +244,12 @@ def foodTruckSummaryFilter(username, foodTruckName, stationName, dateMin, dateMa
         result = [(data[i][0], data[i][1], data[i][2], data[i][3]) for i in range(0, len(data))]
     return result
 
-def getFoodTruckSummary(truckName):
-    return [("2020-01-10", "Customer One", 13.5, 2, ["Apple", "Coffee"])]
-    
 
 # ManageFoodTruck_11
 # Reuturns list of tuples. Tuples are in format (truckName, stationName, remainingCpaacity, staff, # Menu Item)
 # staffMin and staffmax better fecking be numbers
 # and has capacity better be a booleeen
 def manageFoodTruckFilter(username, truckName, stationName, staffMin, staffMax, hasCapacity):
-    return [("FT 1", "Station 1", 4, 3, 10), ("FT 2", "Station 2", 5, 7, 20)]
 
     with con as cursor :
         query = 'call mn_filter_foodtruck(%s, %s, %s, %s, %s, %s);'
@@ -270,23 +267,19 @@ def getStaff(manager):
 # Explore_16 line 13
 # Returns list of all building names
 def getBuildingNames():
-    return ['a', 'b', 'c']
 
     with con as cursor:
         query = "select distinct(buildingName) from building;"
         cursor.execute(query)
         nested_list = cursor.fetchall()
-
     buildings = [''] # we need an empty string at the beginning so the drop down boxes can start empty
     for li in nested_list:
         buildings.append(li[0])
-
     return buildings
 
 # Explore_16 line 17
 # Returns list of all station names
 def getStationNames():
-    return ['d', 'e', 'f']
 
     result = []
     with con as cursor :
@@ -295,14 +288,17 @@ def getStationNames():
         result = [''] # we need an empty string at the beginning so the drop down boxes can start empty
         for i in cursor.fetchall():
             result.append(tuple(i)[0])
-
     return result
 
-# TODO
 # Explore_16 line 66
 # Sets the user's station location
 def setUserStation(username, station):
-    pass
+    with con as cursor:
+        query = 'CALL cus_select_location(%s,%s);'
+        cursor.execute(query, (username, station))
+        con.commit()
+
+    return True
 
 # Explore_16 line 55
 # Returns list of tuples (rows) which fulfill criteria
@@ -358,6 +354,7 @@ def getTrucksAtStation(username):
     return result
     #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
+<<<<<<< HEAD
 # Order_18
 # Gets truck menu all (food, price)
 def getTruckMenu(truckName):
@@ -369,7 +366,20 @@ def submitOrder(purchases, date):
     pass
 
 # TODO
+=======
+>>>>>>> f42333ed555395e9e6bd5316e0491979c8db8319
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)
 def getOrderHistory(username):
-    return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
+    with con as cursor:
+        query = ('call cus_order_history(%s);')
+        cursor.execute(query, (username))
+        con.commit()
+        data = cursor.fetchall()
+        # deal with null values
+        data = [['' if j is None else j for j in i] for i in data]
+        # reformat
+        result = [(data[i][0], data[i][1], data[i][2], data[i][3].split(','), data[i][2]) for i in range(0, len(data))]
+
+    return result
+    # return [("2020-01-20", "000001", 14, ["Apple, Banana"], 5), ("1999-01-25", "000002", 17, ["Chocolate, Chips"], 10)]
