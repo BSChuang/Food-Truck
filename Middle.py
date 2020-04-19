@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "password"#sys.argv[1]
+dbPassword      = sys.argv[1]#sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 

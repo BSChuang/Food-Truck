@@ -60,9 +60,10 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
             return
         try:
             price = float(self.priceTextbox.text())
+            fprice = '{:.2f}'.format(price)
             staffString = self.staff.currentText()
             staffList = staffString.split(',')
-            self.user.menuItems.append((self.foodCombobox.currentText(), price))
+            self.user.menuItems.append((self.foodCombobox.currentText(), fprice))
             self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
         except ValueError:
             return

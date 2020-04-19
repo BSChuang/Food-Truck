@@ -559,8 +559,12 @@ DELIMITER //
 CREATE PROCEDURE mn_create_foodTruck_add_staff(IN i_foodTruckName VARCHAR(50), IN i_staffName VARCHAR(50))
 BEGIN
 
-INSERT INTO STAFF(username, foodTruckName)
-VALUES (i_staffName, i_foodTruckName);
+-- 	INSERT INTO STAFF(username, foodTruckName)
+-- 	VALUES (i_staffName, i_foodTruckName);
+
+	UPDATE STAFF
+    SET foodTruckName = i_foodTruckName
+    WHERE username = i_staffName;
 
 END //
 DELIMITER ;
@@ -687,7 +691,7 @@ BEGIN
 
     UPDATE MENUITEM
     SET price = i_price
-    WHERE mennuItem.foodTruckName = i_foodTruckName AND menuitem.foodName = i_foodName;
+    WHERE menuItem.foodTruckName = i_foodTruckName AND menuitem.foodName = i_foodName;
 
 END //
 DELIMITER ;
