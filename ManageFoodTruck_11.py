@@ -12,6 +12,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.user = user
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
+        self.selectedTruck = None
 
         self.truckNameTextbox = buildTextbox()
         layout1 = buildLayout('H', [buildLabel("Food Truck Name (contain)"), self.truckNameTextbox])

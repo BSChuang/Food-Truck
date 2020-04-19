@@ -65,7 +65,6 @@ class CreateFoodTruckWindow(QtWidgets.QWidget):
             self.user.menuItems.append((self.foodCombobox.currentText(), price))
             self.toCreateFoodTruck.emit(self.nameTextbox.text(), self.stationCombobox.currentText(), staffList)
         except ValueError:
-            print('addFood catch')
             return
 
     def removeFood(self,foodName):
