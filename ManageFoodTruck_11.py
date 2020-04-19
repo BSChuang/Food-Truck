@@ -68,7 +68,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
     def selectFoodTruck(self):
         radio = self.sender()
         if radio.isChecked():
-            self.selectedTruck = radio.value
+            self.user.selectedTruck = radio.value
 
     def back(self):
         self.user.selectedTruck = None
@@ -79,6 +79,7 @@ class ManageFoodTruckWindow(QtWidgets.QWidget):
         self.toCreateFoodTruck.emit()
 
     def update(self):
+        print(self.user.selectedTruck)
         if self.user.selectedTruck != None:
             self.toUpdateFoodTruck.emit()
 

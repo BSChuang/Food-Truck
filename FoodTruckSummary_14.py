@@ -17,8 +17,8 @@ class FoodTruckSummaryWindow(QtWidgets.QWidget):
         self.truckNameTextbox = buildTextbox()
         truckNameLayout = buildLayout('H', [buildLabel("Food Truck Name (contain)"), self.truckNameTextbox])
 
-        self.stationNameTextbox = buildTextbox()
-        stationNameLayout = buildLayout('H', [buildLabel("Station Name"), self.stationNameTextbox])
+        self.stationCombobox = buildComboBox(getStationNames())
+        stationNameLayout = buildLayout('H', [buildLabel("Station Name"), self.stationCombobox])
 
         hLayout1 = buildLayout('H', [truckNameLayout, stationNameLayout])
 
@@ -41,7 +41,7 @@ class FoodTruckSummaryWindow(QtWidgets.QWidget):
     def formatForGrid(self, rows):
         newList = []
         for row in rows:
-            truckName = buildRadioButton(row[0], lambda: self.selectFoodTruck)
+            truckName = buildRadioButton(row[0], self.selectFoodTruck)
             totalOrder = buildLabel(str(row[1]))
             totalRevenue = buildLabel(str(row[2]))
             numCustomer = buildLabel(str(row[3]))
@@ -64,7 +64,7 @@ class FoodTruckSummaryWindow(QtWidgets.QWidget):
                 dateMax = datetime.strptime(self.dateMax.text(), '%m/%d/%Y')
             else : dateMax = None
             
-            self.user.filtered = foodTruckSummaryFilter(self.user.username, self.truckNameTextbox.text(), self.stationNameTextbox.text(), dateMin, dateMax, None, None)
+            self.user.filtered = foodTruckSummaryFilter(self.user.username, self.truckNameTextbox.text(), self.stationCombobox.currentText(), dateMin, dateMax, None, None)
             self.toFoodTruckSummary.emit()
         except ValueError:
             print("Date in wrong format")

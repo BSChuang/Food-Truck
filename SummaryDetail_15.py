@@ -9,7 +9,7 @@ class SummaryDetailWindow(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self)
         self.setWindowTitle('Window')
 
-        details = getFoodTruckSummary(user.selectedTruck)
+        details = getFoodTruckSummary(user.username, user.selectedTruck)
         grid = buildGrid(["Date", "Customer", "Total Purchase", "# Orders", "Food(s)"], self.formatForGrid(details))
         backButton = buildButton("Back", self.back)
 
