@@ -237,10 +237,15 @@ def createFoodTruck(foodTruckName, stationName, username):
 
     return True
 
-def addStaff(foodTruckName, staffName):
+def addStaff(foodTruckName, staffFnameLname):
+    
     with con as cursor:
-        query = 'CALL mn_create_foodTruck_add_staff(%s, %s)'
-        cursor.execute(query, (foodTruckName, staffName))
+        names = staffFnameLname.split(' ')
+        q = 'select username from user where firstname = %s and lastname = %s;'
+        cursor.execute(q, (names[0], names[1]))
+        username = cursor.fetchall()[0][0]
+        q2 = 'CALL mn_create_foodTruck_add_staff(%s, %s)'
+        cursor.execute(q2, (foodTruckName, username))
         con.commit()
 
     return True
