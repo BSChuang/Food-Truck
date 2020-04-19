@@ -14,12 +14,11 @@ con = pymysql.connect(host=dbServerName, user=dbUser, password=dbPassword, db=db
 # Login_01 line 31
 # Returns True or False
 def authenticateUser(username, password):
-    return True # placeholder
 
     with con as cursor:
         query = 'SELECT username, password FROM user WHERE username = %s and password = md5(%s)'
         cursor.execute(query, (username, password))
-        if cursor.fetchall != ():
+        if cursor.fetchall() != ():
             return True
 
     return False
