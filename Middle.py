@@ -358,6 +358,16 @@ def getTrucksAtStation(username):
     return result
     #[("Food Truck One", "Manager One", ["Apple", "Banana"]), ("Food Truck Two", "Manager Two", ["Orange", "Grape"])]
 
+# Order_18
+# Gets truck menu all (food, price)
+def getTruckMenu(truckName):
+    return [("Apple", 3), ("Banana", 5)]
+
+# Order_18
+# Purchases is list of tuple(foodName, quantity) and date is date
+def submitOrder(purchases, date):
+    pass
+
 # TODO
 # OrderHistory_19 line ??
 # Returns list of tuples. Each tuple is one row --> tuple(Date, orderID, orderTotal, Food(s), food quantity)

@@ -4,9 +4,6 @@ from Login_01 import LoginWindow
 from Register_02 import RegisterWindow
 from Home_03 import HomeWindow
 from ManageBuildingStationWindow_04 import ManageBuildingStationWindow
-from Explore_16 import ExploreWindow
-from CurrentInformation_17 import CurrentInformation
-from OrderHistory_19 import OrderHistory
 from CreateBuilding_05 import CreateBuildingWindow
 from UpdateBuilding_06 import UpdateBuildingWindow
 from CreateStation_07 import CreateStationWindow
@@ -18,6 +15,10 @@ from CreateFoodTruck_12 import CreateFoodTruckWindow
 from UpdateFoodTruck_13 import UpdateFoodTruckWindow
 from FoodTruckSummary_14 import FoodTruckSummaryWindow
 from SummaryDetail_15 import SummaryDetailWindow
+from Explore_16 import ExploreWindow
+from CurrentInformation_17 import CurrentInformation
+from Order_18 import OrderWindow
+from OrderHistory_19 import OrderHistory
 from Middle import exploreFilter, manageBuildingStationFilter, manageFoodTruckFilter
 
 
@@ -302,15 +303,6 @@ class Controller:
         self.exploreWindow.toHome.connect(toHome)
         self.exploreWindow.toExplore.connect(toExplore)
         self.exploreWindow.show()
-
-    def showOrderHistory(self):
-        def back():
-            self.orderHistory.close()
-            self.showHome()
-        
-        self.orderHistory = OrderHistory(self.user.username)
-        self.orderHistory.toHome.connect(back)
-        self.orderHistory.show()
     
     def showCurrentInformation(self):
         def back():
@@ -324,6 +316,24 @@ class Controller:
         self.currentInformation.toHome.connect(back)
         self.currentInformation.toOrder.connect(order)
         self.currentInformation.show()
+
+    def showOrder(self):
+        def toCurrentInformation():
+            self.order.close()
+            self.showCurrentInformation()
+
+        self.order = OrderWindow(self.user)
+        self.order.toCurrentInformation.connect(toCurrentInformation)
+        self.order.show()
+
+    def showOrderHistory(self):
+        def back():
+            self.orderHistory.close()
+            self.showHome()
+        
+        self.orderHistory = OrderHistory(self.user.username)
+        self.orderHistory.toHome.connect(back)
+        self.orderHistory.show()
 
 class User:
     def __init__(self):
