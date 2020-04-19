@@ -6,7 +6,7 @@ from pymysql import IntegrityError
 #creating a connection
 dbServerName    = "localhost"
 dbUser          = "root"
-dbPassword      = "password"#sys.argv[1]
+dbPassword      = sys.argv[1]
 dbName          = "cs4400spring2020"
 charSet         = "utf8mb4"
 
@@ -444,9 +444,10 @@ def getOrderHistory(username):
 # foodtruck something, query 20a
 def viewFoodTruckAvailableStaff(username, foodTruckName):
     with con as cursor:
-        query = ('call mn_view_foodTruck_available_staff(%s);')
+        query = ('call mn_view_foodTruck_available_staff(%s,%s);')
         cursor.execute(query, (username, foodTruckName))
-        con.commit()
+        query = ('select * from mn_view_foodTruck_available_staff_result')
+        cursor.execute(query, )
         data = cursor.fetchall()
         result = [(data[i][1]) for i in range(0, len(data))]
     return result

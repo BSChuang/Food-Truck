@@ -25,7 +25,7 @@ class UpdateFoodTruckWindow(QtWidgets.QWidget):
 
         self.staff = CheckableComboBox()
         if staffList == None :
-            self.staff.addItems(viewFooodTrucksAvailableStaff(self.user.username, name))
+            self.staff.addItems(viewFoodTruckAvailableStaff(self.user.username, name))
         else :
             self.staff.addItems(staffList)
 
